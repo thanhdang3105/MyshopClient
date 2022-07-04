@@ -31,7 +31,7 @@ const itemColumns = [
                     width={80}
                     height={80}
                     style={{ objectFit: 'contain' }}
-                    src={require(`../../../asset/img/${text}`)}
+                    src={text && require(`../../../asset/img/${text}`)}
                     alt="imageProducts"
                 />
             </Link>
