@@ -25,7 +25,11 @@ export default function EditUser({ setUserEdit, data }) {
             ? value.address.concat(value.address_provinces).join(',')
             : value.address.split(',').concat(value.address_provinces).join(',');
         axios
-            .post('/api/admin/users', { action: 'setAdmin', data: isAdmin, uid: data.uid })
+            .post(process.env.REACT_APP_API_URL + '/api/admin/users', {
+                action: 'setAdmin',
+                data: isAdmin,
+                uid: data.uid,
+            })
             .catch((err) => console.log(err));
         console.log(value);
         updateDocument(data.id, 'users', {

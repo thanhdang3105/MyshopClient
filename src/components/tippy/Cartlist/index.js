@@ -30,7 +30,7 @@ export default function CartList({ children, setCountItemCart }) {
 
     const removeItemCart = (id) => {
         axios
-            .post('/api/cartList', {
+            .post(process.env.REACT_APP_API_URL + '/api/cartList', {
                 action: 'delete',
                 data: { _id: id },
             })

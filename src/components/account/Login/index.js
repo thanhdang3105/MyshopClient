@@ -96,7 +96,7 @@ export default function Login({ setRegister, setVisibleLoginModal, setTitle }) {
             if (account) {
                 setValidateAccount({});
                 axios
-                    .post('/api/admin/users', {
+                    .post(process.env.REACT_APP_API_URL + '/api/admin/users', {
                         action: 'resetPassword',
                         data: account.email,
                     })

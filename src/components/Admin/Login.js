@@ -105,7 +105,11 @@ export default function Login({ setLogin }) {
                 const data = value.standard + value.account;
                 window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {}, auth);
                 axios
-                    .post('/api/admin/users', { action: 'checkAdmin', method: accountCheck, data })
+                    .post(process.env.REACT_APP_API_URL + '/api/admin/users', {
+                        action: 'checkAdmin',
+                        method: accountCheck,
+                        data,
+                    })
                     .then((res) => {
                         if (res.status === 200 && !res.data) {
                             signInWithPhoneNumber(auth, data, window.recaptchaVerifier)
@@ -140,7 +144,7 @@ export default function Login({ setLogin }) {
                 break;
             case 'email':
                 axios
-                    .post('/api/admin/users', {
+                    .post(process.env.REACT_APP_API_URL + '/api/admin/users', {
                         action: 'checkAdmin',
                         method: accountCheck,
                         status: 'login',

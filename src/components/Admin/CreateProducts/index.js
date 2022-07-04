@@ -27,7 +27,7 @@ export default function CreateProducts() {
         fmData.append('fields', JSON.stringify(values));
         fmData.append('action', 'create');
         axios
-            .post('/api/handleProducts', fmData)
+            .post(process.env.REACT_APP_API_URL + '/api/handleProducts', fmData)
             .then((response) => {
                 if (response.status === 200) {
                     setIsEnabled([]);

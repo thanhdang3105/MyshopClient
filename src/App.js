@@ -13,7 +13,6 @@ import React from 'react';
 import Payment from './components/Content/Payment';
 
 function App() {
-    console.log(process.env.REACT_APP_API_URL);
     const location = useLocation();
     React.useLayoutEffect(() => {
         window.scrollTo(0, 0);

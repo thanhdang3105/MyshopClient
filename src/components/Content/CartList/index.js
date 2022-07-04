@@ -19,7 +19,7 @@ export default function CartList() {
     const handleEvent2 = (id) => {
         if (window.confirm('Bạn có chắc muốn xoá sản phảm này không?')) {
             axios
-                .post('/api/cartList', {
+                .post(process.env.REACT_APP_API_URL + '/api/cartList', {
                     action: 'delete',
                     data: { _id: id },
                 })

@@ -86,7 +86,7 @@ export default function AccountInfo() {
                 .then((UserCrendital) => {
                     if (UserCrendital.user) {
                         axios
-                            .post('/api/admin/users', {
+                            .post(process.env.REACT_APP_API_URL + '/api/admin/users', {
                                 action: 'updatePwd',
                                 uid: UserCrendital.user.uid,
                                 newPassword: value.password,
@@ -123,7 +123,10 @@ export default function AccountInfo() {
         // action: verifyEmail
         setLoading(true);
         axios
-            .post('/api/admin/users', { action: 'verifyEmail', data: currentUser.email })
+            .post(process.env.REACT_APP_API_URL + '/api/admin/users', {
+                action: 'verifyEmail',
+                data: currentUser.email,
+            })
             .then((response) => {
                 if (response.status === 200) {
                     setLoading(false);

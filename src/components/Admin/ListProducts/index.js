@@ -65,7 +65,7 @@ export default function ListProducts() {
 
     const handleRemoveProduct = (id) => {
         axios
-            .delete('/api/deleteProduct/' + id)
+            .delete(process.env.REACT_APP_API_URL + '/api/deleteProduct/' + id)
             .then((response) => {
                 response.status === 200 && dispatch(productsSlice.actions.deleteProduct(id));
             })

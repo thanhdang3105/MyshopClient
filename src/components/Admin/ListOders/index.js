@@ -61,7 +61,11 @@ export default function ListOders({ data: { odersList, setOdersList } }) {
             duration: 1,
         });
         axios
-            .post('/api/OdersList', { action: 'updateStatusById', _id: previewOder._id, status: value })
+            .post(process.env.REACT_APP_API_URL + '/api/OdersList', {
+                action: 'updateStatusById',
+                _id: previewOder._id,
+                status: value,
+            })
             .then((result) => {
                 if (result.status === 200) {
                     setOdersList((prev) => {

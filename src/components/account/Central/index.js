@@ -80,7 +80,11 @@ export default function AccountCentral() {
     const cancelOder = (id) => {
         if (window.confirm('Bạn chắc chắn muốn huỷ đơn hàng này?')) {
             axios
-                .post('/api/OdersList', { action: 'updateStatusById', _id: id, status: 'cancel' })
+                .post(process.env.REACT_APP_API_URL + '/api/OdersList', {
+                    action: 'updateStatusById',
+                    _id: id,
+                    status: 'cancel',
+                })
                 .then((result) => {
                     if (result.status === 200) {
                         setOdersList((prev) => {

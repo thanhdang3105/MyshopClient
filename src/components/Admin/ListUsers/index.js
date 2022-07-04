@@ -48,7 +48,11 @@ export default function ListUsers() {
         const address = arrAddress.slice(0, arrAddress.length - 2);
         const address_provinces = arrAddress.slice(arrAddress.length - 2, arrAddress.length);
         axios
-            .post('/api/admin/users', { action: 'checkAdmin', method: 'email', data: user.email })
+            .post(process.env.REACT_APP_API_URL + '/api/admin/users', {
+                action: 'checkAdmin',
+                method: 'email',
+                data: user.email,
+            })
             .then((res) => {
                 if (res.status === 200 && !res.data) {
                     setUserEdit({
