@@ -1,0 +1,24 @@
+.dropdown_menu{
+    display: flex;
+    top: 100%;
+    .ant-dropdown-menu-item-group {
+        border-right: 1px solid var(--border-color);
+    }
+}
+.header_menu{
+    border: none;
+    background-color: var(--default-color);
+    border: 1px solid var(--border-color);
+    box-shadow: 1px 1px 10px rgb(0 0 0 / 15%);
+    li::after,
+    li:hover::after{
+        border-width: 3px;
+    }
+    .menu_item{
+        font-weight: bold;
+    }
+}
+.Link_header{
+    text-transform: capitalize;
+    display: block;
+}

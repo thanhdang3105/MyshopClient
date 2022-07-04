@@ -1,0 +1,46 @@
+.booth_wrapper{
+    width: 100%;
+    height: fit-content;
+    margin: 60px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    .booth_heading{
+        text-align: center;
+        font-size: 16px;
+        .heading_title{
+            font-size: 32px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+        .heading_desc{
+            width: 60%;
+            margin: 0 auto;
+            word-wrap: break-word;
+            word-break: break-all;
+            line-break: loose;
+        }
+        .catalog_list{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            list-style: none;
+            font-weight: bold;
+            li + li{
+                margin-left: 20px;
+            }
+            .catalog_item{
+                color: var(--color-text);
+                font-weight: bold;
+                text-transform: capitalize;
+                cursor: pointer;
+                &:hover{
+                    color: var(--color-link);
+                }
+            }
+        }
+    }
+    
+}

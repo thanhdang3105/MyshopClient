@@ -1,0 +1,27 @@
+.box_info{
+    display: flex;
+    gap: 20px;
+    margin-bottom: 10px;
+    .col + .col{
+        border-left: 1px solid var(--border-color);
+        padding-left: 20px;
+    }
+}
+.name_product{
+    font-size: 18px;
+    color: var(--color-text);
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .box_info{
+        flex-direction: column;
+        .col + .col{
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            margin-top: -15px;
+            border-left: none;
+            padding-left: 0;
+        }
+    }
+}

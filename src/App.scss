@@ -1,0 +1,151 @@
+@import '~antd/dist/antd.css';
+@import 'tippy.js/dist/tippy.css';
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import "swiper/css/thumbs";
+
+.App{
+    background-color: var(--default-color);
+    .App_footer{
+        background-color: var(--color-text);
+        padding: 30px 50px 10px;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+body .btn_dark{
+    background-color: rgba(41, 41, 41, 0.85);
+    border-color: var(--color-text);
+    color: white;
+    &:hover{
+        border-color: var(--color-text);
+        background-color: var(--color-text);
+        color: white;
+    }
+}
+
+.popper_arrowTippy{
+    --font-size: 25px;
+    font-size: var(--font-size);
+    line-height: var(--font-size);
+    top: calc(8px - var(--font-size));
+    color: var(--default-color);
+}
+
+li.slick-active{
+    &::before{
+        background-color: white !important;
+        width: 12px !important;
+        height: 12px !important;
+    }
+}
+
+.swiper-button-next:after, .swiper-rtl .swiper-button-prev:after,
+.swiper-button-prev:after, .swiper-rtl .swiper-button-next:after{
+    font-size: 20px;
+    color: var(--color-text);
+    font-weight: bold;
+}
+
+.swiper-button-next{
+    right: 0;
+}
+
+.swiper-button-prev{
+    left: 0;
+}
+.booth{
+    .swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled{
+        opacity: 0;
+    }
+
+   .swiper-button-next{
+        opacity: 0;
+        justify-content: flex-end;
+    }
+
+   .swiper-button-prev{
+        opacity: 0;
+        justify-content: flex-start;
+    }
+    .swiper:hover{
+        .swiper-button-prev{
+            animation: fadePrev 0.2s linear forwards;
+        }
+        .swiper-button-next{
+            animation: fadeNext 0.2s linear forwards;
+        }
+        .swiper-button-prev.swiper-button-disabled{
+            animation: fadePrev 0.2s linear;
+            opacity: 0.35;
+        }
+        .swiper-button-next.swiper-button-disabled {
+            animation: fadeNext 0.2s linear;
+            opacity: 0.35;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .booth{
+        .swiper-button-next.swiper-button-disabled, .swiper-button-prev.swiper-button-disabled{
+            opacity: 1;
+        }
+    
+       .swiper-button-next{
+            opacity: 1;
+        }
+        .swiper-button-prev{
+            opacity: 1;
+        }
+    }
+}
+
+@keyframes fadeNext {
+    0%{
+        transform: translateX(-50%);
+    }
+    100%{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadePrev {
+    0%{
+        transform: translateX(50%);
+    }
+    100%{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.swiperVer{
+    .swiper-slide-active{
+        border-radius: 5px;
+        border: 1px solid var(--color-link);
+    }
+}
+
+.banking,.cod{
+    display: none !important;
+    padding: 10px;
+    border-top: 1px solid var(--border-color);
+    background-color: rgb(249, 249, 249);
+}
+.cod.show,.banking.show{
+    display: inline-flex !important;
+}
+
+.link{
+    color: blue;
+    margin: 0;
+    cursor: pointer;
+    &:hover{
+        color: var(--color-link);
+    }
+}

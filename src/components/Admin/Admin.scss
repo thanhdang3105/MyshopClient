@@ -1,0 +1,95 @@
+.sider{
+    overflow: auto;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    .logo {
+        display: inline-block;
+        width: 100%;
+        height: 100px;
+        margin-top: 16px;
+        overflow: hidden;
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+}
+.site-layout{
+    min-height: 100vh;
+    margin-left: 200px;
+    .wrapper{
+        margin: 24px 16px 0;
+        overflow: initial;
+        .site-layout-background {
+            height: 100%;
+            background: #fff;
+            padding: 24px;
+          }
+    }
+}
+
+.item_form{
+    align-items: flex-start;
+}
+
+.inlineBlock{
+    display: inline-block;
+    margin: 0;
+    width: 50%;
+    &.w-33{
+        width: 33%;
+    }
+}
+
+.toggleMenuMobile{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.modalEditProduct{
+    width: 80vw;
+}
+
+.imagePreviewUpload{
+    img{
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+    }
+    & + .imagePreviewUpload{
+        margin-left: 10px;
+    }
+}
+
+@media (max-width: 599px) {
+    .toggleMenuMobile{
+        display: inline-block;
+    }
+    .sider{
+        max-width: unset !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 99;
+        transform: translateX(-100%);
+    }
+    .sider_show{
+        transform: translateX(0);
+        & + .toggleMenuMobile{
+            left: unset;
+            right: 0;
+            background-color: #001529;
+            color: white;
+            border: none;
+        }
+    }
+    .site-layout{
+        margin: 0;
+    }
+}
