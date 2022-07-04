@@ -25,7 +25,7 @@ export default createSlice({
 export const reloadInitState = createAsyncThunk('catalogs/reloadData', async (_, { dispatch }) => {
     const {
         data: { catalogs, categorys, products },
-    } = await axios.get('/api/database');
+    } = await axios.get(process.env.REACT_APP_API_URL + '/api/database');
     const catalogdata = [];
     catalogs.map((catalog) => {
         categorys.map((cate) => {

@@ -73,16 +73,18 @@ export default function ListUsers() {
 
     const handleRemoveUser = (id) => {
         const user = listUser.find((user) => user.id === id);
-        axios.post('/api/admin/users', { action: 'deleteUser', uid: user.uid }).then((response) => {
-            if (response.status === 200) {
-                deleteAccount(id, 'users');
-                message.success({
-                    content: 'Đã xoá tài khoản: ' + user.email,
-                    key: 'deleteUser',
-                    duration: 3,
-                });
-            }
-        });
+        axios
+            .post(process.env.REACT_APP_API_URL + '/api/admin/users', { action: 'deleteUser', uid: user.uid })
+            .then((response) => {
+                if (response.status === 200) {
+                    deleteAccount(id, 'users');
+                    message.success({
+                        content: 'Đã xoá tài khoản: ' + user.email,
+                        key: 'deleteUser',
+                        duration: 3,
+                    });
+                }
+            });
     };
 
     return (

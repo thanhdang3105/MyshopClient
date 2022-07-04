@@ -60,7 +60,9 @@ export default function Admin() {
     const siderRef = React.useRef();
 
     React.useEffect(() => {
-        axios.post('/api/OdersList', { action: 'getAll' }).then((result) => setOdersList(result.data));
+        axios
+            .post(process.env.REACT_APP_API_URL + '/api/OdersList', { action: 'getAll' })
+            .then((result) => setOdersList(result.data));
     }, []);
 
     React.useEffect(() => {

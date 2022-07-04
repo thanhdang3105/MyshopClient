@@ -58,8 +58,11 @@ export default function AccountProvider({ children }) {
     React.useLayoutEffect(() => {
         if (currentUser) {
             Promise.all([
-                axios.get(`/api/cartList/${currentUser.uid}`),
-                axios.post(`/api/OdersList`, { action: 'getByUserId', userId: currentUser.uid }),
+                axios.get(process.env.REACT_APP_API_URL + `/api/cartList/${currentUser.uid}`),
+                axios.post(process.env.REACT_APP_API_URL + `/api/OdersList`, {
+                    action: 'getByUserId',
+                    userId: currentUser.uid,
+                }),
             ])
                 .then(([cartListResult, odersResult]) => {
                     cartListResult && dispatch(cartListSlice.actions.setInitCarts(cartListResult.data));

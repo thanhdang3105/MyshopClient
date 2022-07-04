@@ -104,8 +104,11 @@ export default function Payment() {
             }),
         };
         Promise.all([
-            axios.post('/api/OdersList', { action: 'create', data }),
-            axios.post('/api/cartList', { action: 'deleteByUserId', data: { userId: currentUser.uid } }),
+            axios.post(process.env.REACT_APP_API_URL + '/api/OdersList', { action: 'create', data }),
+            axios.post(process.env.REACT_APP_API_URL + '/api/cartList', {
+                action: 'deleteByUserId',
+                data: { userId: currentUser.uid },
+            }),
         ])
             .then(([resultOder, resultCart]) => {
                 if (resultOder.status === 200) {

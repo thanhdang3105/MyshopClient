@@ -35,6 +35,6 @@ export default createSlice({
 });
 
 export const reloadProductState = createAsyncThunk('products/reloadData', async () => {
-    const { data } = await axios.get('/api/database');
+    const { data } = await axios.get(process.env.REACT_APP_API_URL + '/api/database');
     return data.products;
 });

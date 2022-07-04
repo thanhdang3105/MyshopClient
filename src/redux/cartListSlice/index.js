@@ -24,7 +24,7 @@ const cartListSlice = createSlice({
                 default:
                     throw new Error(`Invalid action ${payload.action}`);
             }
-            axios.post('/api/cartList', {
+            axios.post(process.env.REACT_APP_API_URL + '/api/cartList', {
                 action,
                 data: { _id: payload.id, amount: item.amount },
             });
@@ -50,14 +50,14 @@ export const addCartList = createAsyncThunk('CartList/AddCart', async (product, 
         (item) => item.slug === product.slug && item.color === product.color && item.size === product.size,
     );
     if (check === -1) {
-        const res = await axios.post('/api/cartList', {
+        const res = await axios.post(process.env.REACT_APP_API_URL + '/api/cartList', {
             action: 'create',
             data: product,
         });
         const data = await res.data;
         return [...state, data];
     } else {
-        axios.post('/api/cartList', {
+        axios.post(process.env.REACT_APP_API_URL + '/api/cartList', {
             action: 'update',
             data: { _id: state[check]._id, amount: state[check].amount + 1 },
         });
