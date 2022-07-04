@@ -25,11 +25,10 @@ export default function Modal() {
         try {
             const { _tokenResponse, user } = await signInWithPopup(auth, fbProvider);
             setVisibleLoginModal(false);
-            console.log(user, _tokenResponse);
             if (_tokenResponse?.isNewUser) {
                 const data = {
                     displayName: user.displayName,
-                    email: user.email,
+                    email: user.email || _tokenResponse.email,
                     uid: user.uid,
                     phoneNumber: user.phoneNumber,
                     address: '',

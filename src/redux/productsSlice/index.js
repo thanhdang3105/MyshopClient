@@ -17,8 +17,6 @@ export default createSlice({
         updateProducts: (state, { payload }) => {
             const indexUpdate = state.products.findIndex((product) => product._id === payload._id);
             state.products.splice(indexUpdate, 1, payload);
-            console.log({ indexUpdate });
-            console.log({ state: state.products });
             return state;
         },
         deleteProduct: (state, { payload }) => {

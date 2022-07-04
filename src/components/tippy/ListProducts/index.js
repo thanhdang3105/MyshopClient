@@ -57,7 +57,7 @@ export default function ListProducts({ data, catalog = '' }) {
                         <Link to={`/san-pham/${product.slug}`} className={cx('item_img')}>
                             <img
                                 className={cx('img_content')}
-                                src={product.listImage[0]}
+                                src={product.listImage[0].url}
                                 alt="item-1"
                                 loading="lazy"
                                 onError={handleErrorImg}
@@ -78,9 +78,9 @@ export default function ListProducts({ data, catalog = '' }) {
                                             <img
                                                 key={index}
                                                 className={cx('img_preview')}
-                                                src={img}
+                                                src={img.url}
                                                 alt={'preview-img' + (index + 2)}
-                                                onMouseOut={(e) => handlePreviewImg(e, product.listImage[0])}
+                                                onMouseOut={(e) => handlePreviewImg(e, product.listImage[0].url)}
                                                 onMouseEnter={handlePreviewImg}
                                                 onError={handleErrorImg}
                                                 loading="lazy"

@@ -200,7 +200,7 @@ export default function Catalog() {
                                                     alt="products1"
                                                     // không css vào classname này của thẻ này
                                                     className={cx('img')}
-                                                    src={product.listImage[0]}
+                                                    src={product.listImage[0].url}
                                                     loading="lazy"
                                                     onError={handleErrorImg}
                                                 />
@@ -228,8 +228,8 @@ export default function Catalog() {
                                                         <img
                                                             className={cx('img_preview')}
                                                             alt={`preview ${product._id}-` + index}
-                                                            src={img}
-                                                            onMouseOut={(e) => previewImg(e, product.listImage[0])}
+                                                            src={img.url}
+                                                            onMouseOut={(e) => previewImg(e, product.listImage[0].url)}
                                                             onMouseEnter={previewImg}
                                                             onError={handleErrorImg}
                                                             loading="lazy"

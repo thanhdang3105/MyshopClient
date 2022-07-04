@@ -14,7 +14,14 @@ const itemColumns = [
         dataIndex: 'imageURL',
         title: 'Ảnh',
         render: (text) => (
-            <img key={text} width={80} height={80} style={{ objectFit: 'contain' }} src={text} alt="imageProducts" />
+            <img
+                key={text}
+                width={80}
+                height={80}
+                style={{ objectFit: 'contain' }}
+                src={text.url}
+                alt="imageProducts"
+            />
         ),
     },
     {

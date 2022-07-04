@@ -158,7 +158,7 @@ export default function Product() {
                                         className={`${cx('thumbs_boxImg')} ${index === 0 ? cx('active') : ''}`}
                                     >
                                         <img
-                                            src={img}
+                                            src={img.url}
                                             alt={'swiper' + index}
                                             onClick={() =>
                                                 handleSwiperChange({
@@ -203,7 +203,7 @@ export default function Product() {
                         >
                             {data?.listImage?.map((img, index) => (
                                 <SwiperSlide key={index} className={cx('swiper_slide')}>
-                                    <img src={img} alt={'swiper' + index} />
+                                    <img src={img.url} alt={'swiper' + index} />
                                 </SwiperSlide>
                             ))}
                         </Swiper>

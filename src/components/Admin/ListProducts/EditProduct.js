@@ -26,7 +26,7 @@ export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
             category: dataEdit.category?.split(','),
             collections: dataEdit.collections?.split(','),
             description: dataEdit.description,
-            listImage: dataEdit.listImage,
+            listImage: dataEdit.listImage?.map((img) => img.name || img),
         });
         setDataSelect((prev) => ({ ...prev, category: dataEdit.category?.split(',') }));
     }, [dataEdit, form]);

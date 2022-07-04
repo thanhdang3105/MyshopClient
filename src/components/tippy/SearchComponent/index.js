@@ -28,7 +28,7 @@ export default function SearchComponent({ children, data, search, visible, class
                         label: (
                             <div key={item._id} className={cx('item_list')}>
                                 <Link to={`/san-pham/${item.slug}`} className={cx('item_imgBox')}>
-                                    <img className={cx('img')} src={item.listImage[0]} alt={item.name} />
+                                    <img className={cx('img')} src={item.listImage[0].url} alt={item.name} />
                                 </Link>
                                 <div className={cx('item_info')}>
                                     <Link to={`/san-pham/${item.slug}`} className={cx('item_name')}>

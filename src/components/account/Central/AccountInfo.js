@@ -194,8 +194,12 @@ export default function AccountInfo() {
             <Modal
                 title="Xác thực tài khoản"
                 visible={isVerifyEmail}
-                footer={null}
-                onCancel={() => setIsVerifyEmail(false)}
+                closable={false}
+                footer={
+                    <Button type="primary" danger onClick={() => setIsVerifyEmail(false)}>
+                        Đóng
+                    </Button>
+                }
             >
                 <Form layout="vertical" onFinish={handleVerify}>
                     <Form.Item
