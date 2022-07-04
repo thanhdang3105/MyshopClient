@@ -45,13 +45,7 @@ export default function CartList() {
             key: 'imageURL',
             render: (text, record) => (
                 <Link key={record._id} to={record.path}>
-                    <img
-                        width="80"
-                        height="80"
-                        style={{ objectFit: 'contain' }}
-                        src={require(`../../../asset/img/${text}`)}
-                        alt="Ảnh"
-                    />
+                    <img width="80" height="80" style={{ objectFit: 'contain' }} src={text} alt="Ảnh" />
                 </Link>
             ),
         },

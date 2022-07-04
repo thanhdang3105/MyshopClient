@@ -84,7 +84,7 @@ export default function Catalog() {
         const parent = e.target.offsetParent;
         const img = parent.querySelector(`.img`);
         if (src) {
-            return (img.src = require(`../../../asset/img/${src}`));
+            return (img.src = src);
         }
         img.src = e.target.src;
     };
@@ -200,7 +200,7 @@ export default function Catalog() {
                                                     alt="products1"
                                                     // không css vào classname này của thẻ này
                                                     className={cx('img')}
-                                                    src={require(`../../../asset/img/${product.listImage[0]}`)}
+                                                    src={product.listImage[0]}
                                                     loading="lazy"
                                                     onError={handleErrorImg}
                                                 />
@@ -228,7 +228,7 @@ export default function Catalog() {
                                                         <img
                                                             className={cx('img_preview')}
                                                             alt={`preview ${product._id}-` + index}
-                                                            src={require(`../../../asset/img/${img}`)}
+                                                            src={img}
                                                             onMouseOut={(e) => previewImg(e, product.listImage[0])}
                                                             onMouseEnter={previewImg}
                                                             onError={handleErrorImg}

@@ -16,7 +16,7 @@ export default function ListProducts({ data, catalog = '' }) {
         const parent = e.target.offsetParent;
         const img = parent.querySelector('.img_content');
         if (src) {
-            return (img.src = require(`../../../asset/img/${src}`));
+            return (img.src = src);
         }
         img.src = e.target.src;
     };
@@ -25,7 +25,7 @@ export default function ListProducts({ data, catalog = '' }) {
             modules={[Navigation]}
             spaceBetween={30}
             slidesPerView={4}
-            centerInsufficientSlides={data?.length < 4 && true}
+            centerInsufficientSlides={data && !data[4] && true}
             navigation
             preloadImages
             breakpoints={{
@@ -57,7 +57,7 @@ export default function ListProducts({ data, catalog = '' }) {
                         <Link to={`/san-pham/${product.slug}`} className={cx('item_img')}>
                             <img
                                 className={cx('img_content')}
-                                src={require(`../../../asset/img/${product.listImage[0]}`)}
+                                src={product.listImage[0]}
                                 alt="item-1"
                                 loading="lazy"
                                 onError={handleErrorImg}
@@ -78,7 +78,7 @@ export default function ListProducts({ data, catalog = '' }) {
                                             <img
                                                 key={index}
                                                 className={cx('img_preview')}
-                                                src={require(`../../../asset/img/${img}`)}
+                                                src={img}
                                                 alt={'preview-img' + (index + 2)}
                                                 onMouseOut={(e) => handlePreviewImg(e, product.listImage[0])}
                                                 onMouseEnter={handlePreviewImg}

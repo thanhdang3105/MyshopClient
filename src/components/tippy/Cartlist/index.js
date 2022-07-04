@@ -57,11 +57,7 @@ export default function CartList({ children, setCountItemCart }) {
                                         return (
                                             <li key={item._id} className={cx('cart_item')}>
                                                 <Link to={item.path} className={cx('item_imgBox')}>
-                                                    <img
-                                                        className={cx('img')}
-                                                        src={require(`../../../asset/img/${item.imageURL}`)}
-                                                        alt={item.name}
-                                                    />
+                                                    <img className={cx('img')} src={item.imageURL} alt={item.name} />
                                                 </Link>
                                                 <div className={cx('item_info')}>
                                                     <Link to={item.path} className={cx('item_name')}>

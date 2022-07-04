@@ -235,11 +235,7 @@ export default function Payment() {
                         {dataCart?.map((item) => (
                             <li key={item._id} className={cx('item_cart')}>
                                 <Badge count={item.amount} color="#2db7f5">
-                                    <img
-                                        className={cx('img_item')}
-                                        src={require(`../../../asset/img/${item.imageURL}`)}
-                                        alt={item.name}
-                                    />
+                                    <img className={cx('img_item')} src={item.imageURL} alt={item.name} />
                                 </Badge>
                                 <div className={cx('item_title')}>
                                     <Link to={item.path}>{item.name}</Link>
