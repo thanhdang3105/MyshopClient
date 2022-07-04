@@ -1,4 +1,4 @@
-import { Dropdown, Menu, Popover, Spin } from 'antd';
+import { Menu, Popover, Spin } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import style from './Search.module.scss';

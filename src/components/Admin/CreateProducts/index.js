@@ -49,7 +49,7 @@ export default function CreateProducts() {
 
     const getUrl = React.useCallback(async (files) => {
         const src = await Array.from(files).map((file) => {
-            new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
 
@@ -60,7 +60,6 @@ export default function CreateProducts() {
                 setImagePreview((prev) => [...prev, res]);
             });
         });
-        console.log(src);
         return src;
     }, []);
 

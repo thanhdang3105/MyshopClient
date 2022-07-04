@@ -18,7 +18,7 @@ export default function EditUser({ setUserEdit, data }) {
             phoneNumber: data?.phoneNumber,
             birthday: data?.birthday,
         });
-    }, [data]);
+    }, [data, form]);
 
     const handleFinish = (value) => {
         const newAddress = Array.isArray(value.address)
