@@ -1,4 +1,4 @@
-import { Button, Form, Image, Input, InputNumber } from 'antd';
+import { Button, Form, Image, Input, InputNumber, message } from 'antd';
 import React from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,6 +6,7 @@ import productsSlice from '../../../redux/productsSlice';
 import SelectCustom from './SelectCustom';
 import { catalogSelector, categorySelector } from '../../../redux/selector';
 import { reloadInitState } from '../../../redux/catalogSlice';
+import Resizer from 'react-image-file-resizer';
 
 export default function CreateProducts() {
     const [form] = Form.useForm();
@@ -24,8 +25,14 @@ export default function CreateProducts() {
             fmData.append('file', file);
             return file.name;
         });
+
         fmData.append('fields', JSON.stringify(values));
         fmData.append('action', 'create');
+        message.loading({
+            content: 'Thêm sản phẩm...',
+            key: 'addProduct',
+            duration: 10000,
+        });
         axios
             .post(process.env.REACT_APP_API_URL + '/api/handleProducts', fmData)
             .then((response) => {
@@ -34,6 +41,11 @@ export default function CreateProducts() {
                     setValidateFile({ validateStatus: 'warning', help: 'Chọn ít nhất 1 ảnh!' });
                     form.resetFields();
                     setImagePreview([]);
+                    message.success({
+                        content: 'Thêm thành công ❤',
+                        key: 'addProduct',
+                        duration: 3,
+                    });
                     if (response.data.message) {
                         dispatch(reloadInitState());
                     } else {
@@ -42,6 +54,9 @@ export default function CreateProducts() {
                 }
             })
             .catch((err) => {
+                setValidateFile({ validateStatus: 'warning', help: 'Chọn ít nhất 1 ảnh!' });
+                setIsEnabled([]);
+                setImagePreview([]);
                 form.resetFields();
                 console.log(err);
             });
@@ -49,22 +64,36 @@ export default function CreateProducts() {
 
     const getUrl = React.useCallback(async (files) => {
         const src = await Array.from(files).map((file) => {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
+            return Resizer.imageFileResizer(
+                file,
+                300,
+                300,
+                'WEBP',
+                100,
+                0,
+                (file) => {
+                    console.log(file);
+                    setFileImg((prev) => [...prev, file]);
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
 
-                reader.onload = () => resolve(reader.result);
+                        reader.onload = () => resolve(reader.result);
 
-                reader.onerror = (error) => reject(error);
-            }).then((res) => {
-                setImagePreview((prev) => [...prev, res]);
-            });
+                        reader.onerror = (error) => reject(error);
+                    }).then((res) => {
+                        console.log(res);
+                        setImagePreview((prev) => [...prev, res]);
+                    });
+                },
+                'file',
+            );
         });
         return src;
     }, []);
 
     const selectedImg = (e) => {
-        setFileImg(e.target.files);
+        setFileImg([]);
         setImagePreview([]);
         getUrl(e.target.files);
         if (e.target.files.length < 1) {
