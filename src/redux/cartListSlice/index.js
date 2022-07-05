@@ -3,12 +3,19 @@ import axios from 'axios';
 
 const cartListSlice = createSlice({
     name: 'cartList',
-    initialState: [],
+    initialState: {
+        cartList: [],
+        loading: '',
+    },
     reducers: {
-        setInitCarts: (state, { payload }) => payload,
-        removeItemCart: (state, { payload }) => state.filter((item) => item._id !== payload),
+        setLoadingCart: (state, { payload }) => ({ ...state, loading: payload }),
+        setInitCarts: (state, { payload }) => ({ ...state, cartList: payload }),
+        removeItemCart: (state, { payload }) => {
+            const newCart = state.cartList.filter((item) => item._id !== payload);
+            return { ...state, cartList: newCart };
+        },
         handleAmount: (state, { payload }) => {
-            const item = state.find((item) => item._id === payload.id);
+            const item = state.cartList.find((item) => item._id === payload.id);
             let action = 'update';
             switch (payload.action) {
                 case 'up':
@@ -28,24 +35,30 @@ const cartListSlice = createSlice({
                 action,
                 data: { _id: payload.id, amount: item.amount },
             });
-            return action === 'delete' ? state.filter((item) => item._id !== payload.id) : state;
+            return action === 'delete' ? state.cartList.filter((item) => item._id !== payload.id) : state;
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(addCartList.fulfilled, (state, { payload }) => {
-            if (typeof payload === 'number') {
-                state[payload].amount += 1;
+        builder
+            .addCase(addCartList.pending, (state) => {
+                state.loading = true;
                 return state;
-            }
-            return payload;
-        });
+            })
+            .addCase(addCartList.fulfilled, (state, { payload }) => {
+                if (typeof payload === 'number') {
+                    state.cartList[payload].amount += 1;
+                    state.loading = false;
+                    return state;
+                }
+                return { ...state, cartList: payload, loading: false };
+            });
     },
 });
 
 export default cartListSlice;
 
 export const addCartList = createAsyncThunk('CartList/AddCart', async (product, { getState }) => {
-    const state = getState().cartList;
+    const state = getState().cartList.cartList;
     const check = state.findIndex(
         (item) => item.slug === product.slug && item.color === product.color && item.size === product.size,
     );

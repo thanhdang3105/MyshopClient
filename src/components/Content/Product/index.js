@@ -2,10 +2,10 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { productsSelector } from '../../../redux/selector';
-import { Breadcrumb, Button, Divider, Layout } from 'antd';
+import { Breadcrumb, Button, Divider, Layout, message } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
-import { addCartList } from '../../../redux/cartListSlice';
+import cartListSlice, { addCartList } from '../../../redux/cartListSlice';
 import { Account } from '../../Provider/AccountProvider';
 import ListProducts from '../../tippy/ListProducts';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
@@ -19,6 +19,7 @@ const cx = classNames.bind(styles);
 export default function Product() {
     const { slug } = useParams();
     const products = useSelector(productsSelector);
+    const loadingCart = useSelector(({ cartList }) => cartList.loading);
     const [data, setData] = React.useState({});
     const [productCart, setProductCart] = React.useState({});
     const [btnAttr, setBtnAttr] = React.useState({ up: { disabled: true }, down: { disabled: false } });
@@ -37,6 +38,23 @@ export default function Product() {
         setProductCart({ ...product, color: color, size: size, user: currentUser?.uid });
         setData(product);
     }, [slug, products, currentUser]);
+
+    React.useEffect(() => {
+        if (loadingCart) {
+            message.loading({
+                content: 'Thêm sản phẩm...',
+                key: 'addCart',
+                duration: 10,
+            });
+        } else if (loadingCart === false && loadingCart !== '') {
+            message.success({
+                content: 'Thêm vào giỏ thành công ❤',
+                key: 'addCart',
+                duration: 2,
+            });
+            dispatch(cartListSlice.actions.setLoadingCart(''));
+        }
+    }, [loadingCart]);
 
     const handleSwiperChange = (swiper, action) => {
         if (swiper.slides.length > 4) {

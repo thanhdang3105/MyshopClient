@@ -15,7 +15,7 @@ const productEditSelector = ({ products }) => products.productEdit;
 const productSearchSelector = ({ products }) => products.searchProduct;
 const catalogSelector = ({ catalog }) => catalog.catalogs;
 const categorySelector = ({ catalog }) => catalog.categorys;
-const cartListSelector = ({ cartList }) => cartList;
+const cartListSelector = ({ cartList }) => cartList.cartList;
 
 const productsSearch = createSelector(productsSelector, productSearchSelector, (products, search) => {
     const productsFilter =

@@ -27,7 +27,7 @@ const itemColumns = [
         title: 'Ảnh',
         render: (text, record) => (
             <Link to={record.path} key={record.name + record.size}>
-                <img width={80} height={80} style={{ objectFit: 'contain' }} src={text.url} alt="imageProducts" />
+                <img width={80} height={80} style={{ objectFit: 'contain' }} src={text} alt="imageProducts" />
             </Link>
         ),
     },

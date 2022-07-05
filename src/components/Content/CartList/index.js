@@ -122,14 +122,16 @@ export default function CartList() {
                     Tổng cộng:{' '}
                     <span className={cx('text_price')}>
                         {cartList
-                            ?.reduce((total, item) => {
-                                total += item.price * item.amount;
-                                return total;
-                            }, 0)
-                            .toLocaleString('en-gb') + 'đ'}
+                            ? cartList
+                                  .reduce((total, item) => {
+                                      total += item.price * item.amount;
+                                      return total;
+                                  }, 0)
+                                  .toLocaleString('en-gb') + 'đ'
+                            : 0 + 'đ'}
                     </span>
                 </p>
-                {cartList.length ? (
+                {cartList?.length ? (
                     <Link to="/thanh-toan" className={cx('btn')}>
                         Tiến hành thanh toán
                     </Link>

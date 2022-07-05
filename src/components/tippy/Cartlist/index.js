@@ -24,7 +24,7 @@ export default function CartList({ children, setCountItemCart }) {
     }, [cartList]);
 
     React.useEffect(() => {
-        const count = cartItem.length;
+        const count = cartItem?.length;
         setCountItemCart(count);
     }, [cartItem, setCountItemCart]);
 
@@ -50,7 +50,7 @@ export default function CartList({ children, setCountItemCart }) {
                     </div>
                     <div {...attrs} className={cx('wrapper_cart')}>
                         <h4 className={cx('cart_heading')}>Giỏ hàng</h4>
-                        {cartItem.length ? (
+                        {cartItem?.length ? (
                             <>
                                 <ul className={cx('cart_list')}>
                                     {cartItem?.map((item) => {
