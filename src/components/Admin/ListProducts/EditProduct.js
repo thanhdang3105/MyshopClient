@@ -56,7 +56,7 @@ export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
                         if (response.data.message) {
                             dispatch(reloadInitState());
                         } else {
-                            dispatch(productsSlice.actions.updateProducts(response.data.data));
+                            dispatch(productsSlice.actions.updateProducts(response.data));
                         }
                     }
                 })

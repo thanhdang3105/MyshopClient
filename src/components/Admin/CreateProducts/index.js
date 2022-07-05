@@ -37,7 +37,7 @@ export default function CreateProducts() {
                     if (response.data.message) {
                         dispatch(reloadInitState());
                     } else {
-                        dispatch(productsSlice.actions.addProducts(response.data.data));
+                        dispatch(productsSlice.actions.addProducts(response.data));
                     }
                 }
             })

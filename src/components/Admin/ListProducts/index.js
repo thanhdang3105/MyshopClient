@@ -53,7 +53,8 @@ export default function ListProducts() {
 
     React.useLayoutEffect(() => {
         const data = [];
-        products.forEach((item) => data.push({ ...item, key: item._id }));
+        products.map((item) => item && data.push({ ...item, key: item._id }));
+        console.log(products);
         setProductList(data);
     }, [products]);
 
