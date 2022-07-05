@@ -18,7 +18,7 @@ export default function AccountProvider({ children }) {
     const users = useFireStore('users');
     const [listUser, setListUser] = React.useState([]);
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         const data = users.map((doc, index) => ({
             key: index + 1,
             name: doc.data().name || doc.data().displayName,
@@ -55,7 +55,7 @@ export default function AccountProvider({ children }) {
             .catch((Error) => console.log(Error));
     }, [dispatch]);
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         if (currentUser) {
             Promise.all([
                 axios.get(process.env.REACT_APP_API_URL + `/api/cartList/${currentUser.uid}`),
@@ -72,7 +72,7 @@ export default function AccountProvider({ children }) {
         }
     }, [currentUser?.uid, dispatch]);
 
-    React.useLayoutEffect(() => {
+    React.useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user && user.providerData[0].providerId !== 'phone') {
                 const uid = user.uid;

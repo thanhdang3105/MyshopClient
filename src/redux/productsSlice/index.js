@@ -7,9 +7,11 @@ export default createSlice({
         products: [],
         productEdit: {},
         searchProduct: '',
+        loading: 0,
     },
     reducers: {
-        setInitProducts: (state, { payload }) => ({ ...state, products: payload }),
+        setProgress: (state, { payload }) => ({ ...state, loading: payload }),
+        setInitProducts: (state, { payload }) => ({ ...state, products: payload, loading: 100 }),
         addProducts: (state, { payload }) => {
             state.products.push(payload);
             return state;

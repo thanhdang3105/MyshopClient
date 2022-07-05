@@ -11,13 +11,18 @@ import AccountCentral from './components/account/Central';
 import CartList from './components/Content/CartList';
 import React from 'react';
 import Payment from './components/Content/Payment';
+import { useSelector } from 'react-redux';
+import Loading from './components/Loading';
 
 function App() {
+    const loadingState = useSelector(({ products }) => products.loading);
     const location = useLocation();
     React.useLayoutEffect(() => {
         window.scrollTo(0, 0);
     }, [location]);
-    return (
+    return loadingState !== false ? (
+        <Loading />
+    ) : (
         <Layout className="App">
             <Header />
             <Routes>
