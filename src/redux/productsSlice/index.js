@@ -11,7 +11,7 @@ export default createSlice({
     },
     reducers: {
         setProgress: (state, { payload }) => ({ ...state, loading: payload }),
-        setInitProducts: (state, { payload }) => ({ ...state, products: payload, loading: 100 }),
+        setInitProducts: (state, { payload }) => ({ ...state, products: payload, loading: false }),
         addProducts: (state, { payload }) => {
             state.products.push(payload);
             return state;
