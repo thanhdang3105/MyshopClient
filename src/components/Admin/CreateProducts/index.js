@@ -28,6 +28,7 @@ export default function CreateProducts() {
         values.createdAt = Date.now();
         fmData.append('fields', JSON.stringify(values));
         fmData.append('action', 'create');
+        setValidateFile({ validateStatus: 'validating' });
         message.loading({
             content: 'Thêm sản phẩm...',
             key: 'addProduct',
