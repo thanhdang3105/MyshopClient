@@ -28,7 +28,13 @@ export default function CartList() {
         }
     };
 
+    React.useEffect(() => {
+        console.log(cartList);
+    }, [cartList]);
+
     const handleAmount = (id, action, amount) => {
+        console.log(cartList);
+        console.log(id);
         if (action === 'down' && amount === 1) {
             window.confirm('Bạn có chắc muốn xoá sản phảm này không?') &&
                 dispatch(cartListSlice.actions.handleAmount({ id, action }));

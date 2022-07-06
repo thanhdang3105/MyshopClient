@@ -35,7 +35,9 @@ const cartListSlice = createSlice({
                 action,
                 data: { _id: payload.id, amount: item.amount },
             });
-            return action === 'delete' ? state.cartList.filter((item) => item._id !== payload.id) : state;
+            return action === 'delete'
+                ? { ...state, cartList: state.cartList.filter((item) => item._id !== payload.id) }
+                : state;
         },
     },
     extraReducers: (builder) => {
