@@ -51,3 +51,51 @@
         opacity: 0.7;
     }
 }
+
+@media (max-width: 1200px) {
+    .wrapper{
+        .loading_content{
+            padding: 13vh 15%;
+            .loading_content-text{
+                h1{
+                    font-size: 30px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .wrapper{
+        .loading_content{
+            padding: 15vh 10%;
+            .loading_content-text{
+                h1{
+                    font-size: 25px;
+                }
+                p{
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .wrapper{
+        .loading_content{
+            padding: 15vh 5%;
+            .loading_content-text{
+                h1{
+                    font-size: 22px;
+                }
+                p{
+                    font-size: 12px;
+                }
+            }
+        }
+        .wrapper_shadow{
+            opacity: 0.9;
+        }
+    }
+}
