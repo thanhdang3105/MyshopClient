@@ -3,34 +3,44 @@ import { Button, Divider, Form, Input, Select, Space } from 'antd';
 import React from 'react';
 
 export default function SelectCustom({ disabled = false, data, checkData, isSelected, ...prop }) {
-    const [valueInput, setValueInput] = React.useState('');
-    const [itemsOption, setItemsOption] = React.useState(data);
+    const [optionDisabled, setOptionDisabled] = React.useState(false);
+    const [itemsOption, setItemsOption] = React.useState([]);
+    const [form2] = Form.useForm();
+    const selectRef = React.useRef();
+
     React.useLayoutEffect(() => {
         switch (prop.name) {
             case 'catalog':
-                let arrCatalog = [];
+                let arrCatalog = itemsOption.length ? itemsOption : [];
                 data.map((item) => {
-                    arrCatalog.push(item);
+                    if (!arrCatalog.map((cata) => cata.name).includes(item.name)) {
+                        arrCatalog.push(item);
+                    }
                     return item;
                 });
+
                 setItemsOption(arrCatalog);
                 break;
             case 'category':
-                let arrCategory = [];
+                let arrCategory = itemsOption.length ? itemsOption : [];
                 data.length &&
                     data.map((category) => {
-                        arrCategory.push(category);
+                        if (!arrCategory.map((cate) => cate.name).includes(category.name)) {
+                            arrCategory.push(category);
+                        }
                         return category;
                     });
                 setItemsOption(arrCategory);
                 break;
             case 'collections':
-                let arrCollection = [];
+                let arrCollection = itemsOption.length ? itemsOption : [];
                 data.length &&
                     data.map((category) => {
                         if (checkData.dataSelect.category?.includes(category.name)) {
                             category.children.map((item) => {
-                                arrCollection.push(item);
+                                if (!arrCollection.map((collection) => collection.name).includes(item.name)) {
+                                    arrCollection.push(item);
+                                }
                                 return item;
                             });
                         }
@@ -50,6 +60,14 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
         checkData.setDataSelect((prev) => ({ ...prev, [prop.name]: value }));
     };
 
+    const handleAddOption = (value) => {
+        if (value.addOption !== '' && !itemsOption.includes(value.addOption)) {
+            setItemsOption((prev) => [...prev, { key: itemsOption.length + 1, name: value.addOption }]);
+            setOptionDisabled(false);
+            form2.resetFields();
+        }
+    };
+
     return (
         <Form.Item
             {...prop}
@@ -57,11 +75,17 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
             className="inlineBlock w-33"
         >
             <Select
+                ref={selectRef}
                 mode="multiple"
                 disabled={disabled}
                 onChange={handleSelect}
+                onDropdownVisibleChange={(visible) => {
+                    if (!visible) {
+                        setOptionDisabled(false);
+                    }
+                }}
                 dropdownRender={(menu) => (
-                    <>
+                    <Form form={form2} onFinish={handleAddOption}>
                         {menu}
                         <Divider
                             style={{
@@ -74,31 +98,33 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
                                 padding: '0 8px 4px',
                             }}
                         >
-                            <Button
-                                type="text"
-                                size="small"
-                                onClick={() => {
-                                    setValueInput('');
-                                    !itemsOption.includes(valueInput) &&
-                                        !(valueInput === '') &&
-                                        setItemsOption((prev) => [...prev, { name: valueInput }]);
-                                }}
-                                style={{ whiteSpace: 'nowrap' }}
-                            >
+                            <Button type="text" size="small" htmlType="submit" style={{ whiteSpace: 'nowrap' }}>
                                 <PlusOutlined />
                             </Button>
-                            <Input
-                                value={valueInput}
-                                placeholder="Please enter item"
-                                onChange={(e) => setValueInput(e.target.value)}
-                            />
+                            <Form.Item name="addOption" style={{ margin: 0 }}>
+                                <Input
+                                    placeholder="Please enter item"
+                                    onFocus={() => {
+                                        setOptionDisabled(true);
+                                    }}
+                                    onBlur={() => {
+                                        setOptionDisabled(false);
+                                    }}
+                                    onInput={(e) => {
+                                        if (e.target.value === '' && e.code !== 'Backspace') {
+                                            return setOptionDisabled(false);
+                                        }
+                                        setOptionDisabled(true);
+                                    }}
+                                />
+                            </Form.Item>
                         </Space>
-                    </>
+                    </Form>
                 )}
             >
                 {itemsOption.length &&
                     itemsOption.map((item, index) => (
-                        <Select.Option key={index} value={item.name}>
+                        <Select.Option disabled={optionDisabled} key={item.key || index} value={item.name}>
                             {item.name}
                         </Select.Option>
                     ))}

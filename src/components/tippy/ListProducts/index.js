@@ -33,17 +33,17 @@ export default function ListProducts({ data, catalog = '' }) {
                     slidesPerView: 1,
                     spaceBetween: 50,
                 },
-                480: {
+                660: {
                     slidesPerView: 2,
                     spaceBetween: 30,
                 },
                 // when window width is >= 1024px
-                1024: {
+                992: {
                     slidesPerView: 3,
                     spaceBetween: 30,
                 },
                 // when window width is >= 1280px
-                1280: {
+                1290: {
                     slidesPerView: 4,
                     spaceBetween: 30,
                 },

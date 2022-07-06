@@ -54,10 +54,11 @@ export default function CreateProducts() {
                 }
             })
             .catch((err) => {
-                setValidateFile({ validateStatus: 'warning', help: 'Chọn ít nhất 1 ảnh!' });
-                setIsEnabled([]);
-                setImagePreview([]);
-                form.resetFields();
+                message.error({
+                    content: 'Đã xảy ra lỗi',
+                    key: 'addProduct',
+                    duration: 3,
+                });
                 console.log(err);
             });
     };
@@ -66,13 +67,12 @@ export default function CreateProducts() {
         const src = await Array.from(files).map((file) => {
             return Resizer.imageFileResizer(
                 file,
-                300,
-                300,
+                500,
+                500,
                 'WEBP',
-                100,
+                80,
                 0,
                 (file) => {
-                    console.log(file);
                     setFileImg((prev) => [...prev, file]);
                     new Promise((resolve, reject) => {
                         const reader = new FileReader();
@@ -82,11 +82,12 @@ export default function CreateProducts() {
 
                         reader.onerror = (error) => reject(error);
                     }).then((res) => {
-                        console.log(res);
                         setImagePreview((prev) => [...prev, res]);
                     });
                 },
                 'file',
+                250,
+                250,
             );
         });
         return src;
