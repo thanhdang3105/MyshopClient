@@ -25,7 +25,7 @@ export default function CreateProducts() {
             fmData.append('file', file);
             return file.name;
         });
-        values.createdAt = new Date.now();
+        values.createdAt = Date.now();
         fmData.append('fields', JSON.stringify(values));
         fmData.append('action', 'create');
         message.loading({
