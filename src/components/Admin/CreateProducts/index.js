@@ -136,8 +136,8 @@ export default function CreateProducts() {
                     >
                         <InputNumber
                             controls={false}
-                            formatter={(value) => `đ  ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={(value) => value.replace(/\đ\s?|(,*)/g, '')}
+                            formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
                             style={{ width: '100%' }}
                         />
                     </Form.Item>
