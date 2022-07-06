@@ -70,7 +70,7 @@ export default function AccountProvider({ children }) {
                 })
                 .catch((err) => console.error(err));
         }
-    }, [currentUser?.uid, dispatch]);
+    }, [currentUser, dispatch]);
 
     React.useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -86,7 +86,7 @@ export default function AccountProvider({ children }) {
     }, [listUser, dispatch]);
 
     const handleErrorImg = React.useCallback((e) => {
-        e.target.src = process.env.PUBLIC_URL + '/img/empty.svg';
+        e.target.src = process.env.PUBLIC_URL + '/img/imgErr.jpg';
     }, []);
 
     return (

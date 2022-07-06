@@ -6,6 +6,7 @@ import { reloadInitState } from '../../../redux/catalogSlice';
 import productsSlice from '../../../redux/productsSlice';
 import { catalogSelector, categorySelector, productEditSelector } from '../../../redux/selector';
 import SelectCustom from '../CreateProducts/SelectCustom';
+import Resizer from 'react-image-file-resizer';
 
 export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
     const [form] = Form.useForm();
@@ -72,8 +73,29 @@ export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
         }
     };
 
-    const selectedImg = (e) => {
-        setFileImg(e.target.files);
+    const getUrl = React.useCallback(async (files) => {
+        const src = await Array.from(files).map((file) => {
+            return Resizer.imageFileResizer(
+                file,
+                500,
+                500,
+                'WEBP',
+                80,
+                0,
+                (file) => {
+                    setFileImg((prev) => [...prev, file]);
+                },
+                'file',
+                250,
+                250,
+            );
+        });
+        return src;
+    }, []);
+
+    const selectedImg = async (e) => {
+        setFileImg([]);
+        await getUrl(e.target.files);
     };
 
     const handleCancel = () => {

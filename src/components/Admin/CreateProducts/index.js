@@ -74,7 +74,7 @@ export default function CreateProducts() {
                 0,
                 (file) => {
                     setFileImg((prev) => [...prev, file]);
-                    new Promise((resolve, reject) => {
+                    return new Promise((resolve, reject) => {
                         const reader = new FileReader();
                         reader.readAsDataURL(file);
 
@@ -93,10 +93,10 @@ export default function CreateProducts() {
         return src;
     }, []);
 
-    const selectedImg = (e) => {
+    const selectedImg = async (e) => {
         setFileImg([]);
         setImagePreview([]);
-        getUrl(e.target.files);
+        await getUrl(e.target.files);
         if (e.target.files.length < 1) {
             setValidateFile({ validateStatus: 'error', help: 'Chọn ít nhất 1 ảnh!' });
         } else {

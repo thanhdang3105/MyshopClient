@@ -11,36 +11,30 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
     React.useLayoutEffect(() => {
         switch (prop.name) {
             case 'catalog':
-                let arrCatalog = itemsOption.length ? itemsOption : [];
+                let arrCatalog = [];
                 data.map((item) => {
-                    if (!arrCatalog.map((cata) => cata.name).includes(item.name)) {
-                        arrCatalog.push(item);
-                    }
+                    arrCatalog.push(item);
                     return item;
                 });
 
-                setItemsOption(arrCatalog);
+                setItemsOption((prev) => [...prev.filter((item) => item.key), ...arrCatalog]);
                 break;
             case 'category':
-                let arrCategory = itemsOption.length ? itemsOption : [];
+                let arrCategory = [];
                 data.length &&
                     data.map((category) => {
-                        if (!arrCategory.map((cate) => cate.name).includes(category.name)) {
-                            arrCategory.push(category);
-                        }
+                        arrCategory.push(category);
                         return category;
                     });
-                setItemsOption(arrCategory);
+                setItemsOption((prev) => [...prev.filter((item) => item.key), ...arrCategory]);
                 break;
             case 'collections':
-                let arrCollection = itemsOption.length ? itemsOption : [];
+                let arrCollection = itemsOption.length ? itemsOption.filter((item) => item.key) : [];
                 data.length &&
                     data.map((category) => {
                         if (checkData.dataSelect.category?.includes(category.name)) {
                             category.children.map((item) => {
-                                if (!arrCollection.map((collection) => collection.name).includes(item.name)) {
-                                    arrCollection.push(item);
-                                }
+                                arrCollection.push(item);
                                 return item;
                             });
                         }
@@ -61,9 +55,11 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
     };
 
     const handleAddOption = (value) => {
-        if (value.addOption !== '' && !itemsOption.includes(value.addOption)) {
-            setItemsOption((prev) => [...prev, { key: itemsOption.length + 1, name: value.addOption }]);
+        if (value.addOption !== '' && !itemsOption.find((item) => item.name === value.addOption)) {
+            setItemsOption((prev) => [{ key: value.addOption, name: value.addOption }, ...prev]);
             setOptionDisabled(false);
+            form2.resetFields();
+        } else {
             form2.resetFields();
         }
     };

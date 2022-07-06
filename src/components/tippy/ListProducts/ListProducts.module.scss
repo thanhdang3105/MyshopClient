@@ -52,6 +52,7 @@
             flex: 1;
             overflow: hidden;
             display: block;
+            z-index: 1;
             img{
                 object-fit: contain;
                 height: 100%;

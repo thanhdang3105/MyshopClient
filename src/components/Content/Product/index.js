@@ -54,7 +54,7 @@ export default function Product() {
             });
             dispatch(cartListSlice.actions.setLoadingCart(''));
         }
-    }, [loadingCart]);
+    }, [loadingCart, dispatch]);
 
     const handleSwiperChange = (swiper, action) => {
         if (swiper.slides.length > 4) {
