@@ -14,8 +14,10 @@ const cx = classNames.bind(styles);
 
 export default function CartList({ children, setCountItemCart }) {
     const [cartItem, setCartItem] = React.useState([]);
+    // const [visible, setVisible] = React.useState({});
 
     const cartList = useSelector(cartListSelector);
+    const loading = useSelector(({ cartList }) => cartList.loading);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -27,6 +29,10 @@ export default function CartList({ children, setCountItemCart }) {
         const count = cartItem?.length;
         setCountItemCart(count);
     }, [cartItem, setCountItemCart]);
+
+    React.useEffect(() => {
+        loading === false && children.ref.current.click();
+    }, [loading, children.ref]);
 
     const removeItemCart = (id) => {
         axios
@@ -43,6 +49,7 @@ export default function CartList({ children, setCountItemCart }) {
             placement="bottom-start"
             interactive
             arrow
+            trigger="click"
             render={(attrs) => (
                 <>
                     <div data-popper-arrow className="popper_arrowTippy">
@@ -88,14 +95,20 @@ export default function CartList({ children, setCountItemCart }) {
                                     <Button
                                         className={cx('btn_cart')}
                                         icon={<ShoppingFilled />}
-                                        onClick={() => navigate('/gio-hang')}
+                                        onClick={() => {
+                                            children.ref.current.click();
+                                            navigate('/gio-hang');
+                                        }}
                                     >
                                         Giỏ hàng
                                     </Button>
                                     <Button
                                         className={cx('btn_cart')}
                                         icon={<WalletOutlined />}
-                                        onClick={() => navigate('/thanh-toan')}
+                                        onClick={() => {
+                                            children.ref.current.click();
+                                            navigate('/thanh-toan');
+                                        }}
                                     >
                                         Thanh toán
                                     </Button>

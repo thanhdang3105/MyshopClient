@@ -45,6 +45,7 @@ export default function Header() {
     const headerRef = React.useRef();
     const timerRef = React.useRef();
     const searchRef = React.useRef();
+    const cartBTNRef = React.useRef();
 
     React.useEffect(() => {
         document.onscroll = (e) => {
@@ -358,6 +359,7 @@ export default function Header() {
                         </SearchComponent>
                         <CartList setCountItemCart={setCountItemCart}>
                             <Button
+                                ref={cartBTNRef}
                                 type="text"
                                 icon={
                                     <Badge count={countItemCart} size="small" showZero title="">

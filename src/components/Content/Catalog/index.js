@@ -157,15 +157,24 @@ export default function Catalog() {
                         /<span className={cx('controlTop_countItem-text')}>{pagination.total}</span> Sản phẩm
                     </div>
                     <Select
+                        size={window.innerWidth <= 320 ? 'small' : 'middle'}
                         value={selectSort}
                         placeholder="Lọc"
                         className={cx('controlTop_select')}
                         onChange={handleChangeFilterSelect}
                     >
-                        <Option value="new">Mới nhất</Option>
-                        <Option value="hot">Bán chạy nhất</Option>
-                        <Option value="asc">Giá tăng dần</Option>
-                        <Option value="desc">Giá giảm dần</Option>
+                        <Option className={cx('controlTop_select-option')} value="new">
+                            Mới nhất
+                        </Option>
+                        <Option className={cx('controlTop_select-option')} value="hot">
+                            Bán chạy nhất
+                        </Option>
+                        <Option className={cx('controlTop_select-option')} value="asc">
+                            Giá tăng dần
+                        </Option>
+                        <Option className={cx('controlTop_select-option')} value="desc">
+                            Giá giảm dần
+                        </Option>
                     </Select>
                 </div>
             </div>
@@ -190,9 +199,11 @@ export default function Catalog() {
                                         className={cx('card_box-item')}
                                         bordered={false}
                                         bodyStyle={
-                                            window.innerWidth < 480
-                                                ? { padding: '0', minHeight: '120px', flex: '0' }
-                                                : { padding: '12px 24px 12px', minHeight: '160px', flex: '0' }
+                                            window.innerWidth <= 320
+                                                ? { padding: '1px', flex: 0 }
+                                                : window.innerWidth < 1024
+                                                ? { padding: '5px 7px', flex: 0 }
+                                                : { padding: '12px 24px 12px', flex: 0 }
                                         }
                                         cover={
                                             <Link to={`/san-pham/${product.slug}`} className={cx('img_content')}>

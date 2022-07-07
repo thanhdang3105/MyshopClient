@@ -9,6 +9,7 @@ import { Button } from 'antd';
 import Input from 'antd/lib/input/Input';
 import axios from 'axios';
 import cartListSlice from '../../../redux/cartListSlice';
+import confirm from 'antd/lib/modal/confirm';
 
 const cx = classNames.bind(style);
 
@@ -17,27 +18,30 @@ export default function CartList() {
     const dispatch = useDispatch();
 
     const handleEvent2 = (id) => {
-        if (window.confirm('Bạn có chắc muốn xoá sản phảm này không?')) {
-            axios
-                .post(process.env.REACT_APP_API_URL + '/api/cartList', {
-                    action: 'delete',
-                    data: { _id: id },
-                })
-                .then((res) => res.status === 200 && dispatch(cartListSlice.actions.removeItemCart(id)))
-                .catch((err) => alert(err));
-        }
+        confirm({
+            title: 'Bạn có chắc muốn xoá sản phảm này không?',
+            onOk: () => {
+                axios
+                    .post(process.env.REACT_APP_API_URL + '/api/cartList', {
+                        action: 'delete',
+                        data: { _id: id },
+                    })
+                    .then((res) => res.status === 200 && dispatch(cartListSlice.actions.removeItemCart(id)))
+                    .catch((err) => alert(err));
+            },
+            type: 'confirm',
+        });
     };
 
-    React.useEffect(() => {
-        console.log(cartList);
-    }, [cartList]);
-
     const handleAmount = (id, action, amount) => {
-        console.log(cartList);
-        console.log(id);
         if (action === 'down' && amount === 1) {
-            window.confirm('Bạn có chắc muốn xoá sản phảm này không?') &&
-                dispatch(cartListSlice.actions.handleAmount({ id, action }));
+            confirm({
+                title: 'Bạn có chắc muốn xoá sản phảm này không?',
+                onOk: () => {
+                    dispatch(cartListSlice.actions.handleAmount({ id, action }));
+                },
+                type: 'confirm',
+            });
         } else if (action === 'up' && amount === 5) {
             alert('Tối đa 5 chiếc/sẩn phẩm nếu muốn đặt thêm hãy tạo đơn mới hoặc liên hệ hotline xin cảm ơn.');
         } else {
