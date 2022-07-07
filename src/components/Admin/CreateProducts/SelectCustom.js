@@ -38,7 +38,6 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
                             category.children.map((item) => {
                                 !arrCollection.map((collec) => collec.name).includes(item.name) &&
                                     arrCollection.push(item);
-
                                 return item;
                             });
                         }
