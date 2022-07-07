@@ -1,4 +1,4 @@
-import { Button, Form, Input, InputNumber, message, Modal } from 'antd';
+import { Button, Form, Input, InputNumber, message, Modal, Select } from 'antd';
 import axios from 'axios';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,7 +6,8 @@ import { reloadInitState } from '../../../redux/catalogSlice';
 import productsSlice from '../../../redux/productsSlice';
 import { catalogSelector, categorySelector, productEditSelector } from '../../../redux/selector';
 import SelectCustom from '../CreateProducts/SelectCustom';
-import Resizer from 'react-image-file-resizer';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { storage } from '../../../firebase/config';
 
 export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
     const [form] = Form.useForm();
@@ -32,27 +33,43 @@ export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
         setDataSelect((prev) => ({ ...prev, category: dataEdit.category?.split(',') }));
     }, [dataEdit, form]);
 
-    const handleFinish = (values) => {
-        const fmData = new FormData();
-        values.newImage = Object.values(fileImg).map((file) => {
-            fmData.append('file', file);
-            return file.name;
+    const handleFinish = async (values) => {
+        message.loading({
+            content: 'Thêm sản phẩm...',
+            key: 'editProduct',
+            duration: 10000,
         });
+        const listImg = [];
+        try {
+            for (const file of Object.values(fileImg)) {
+                const imgRef = await uploadBytes(ref(storage, file.name), file);
+                listImg.push({ name: file.name, url: await getDownloadURL(imgRef.ref) });
+            }
+        } catch (e) {
+            console.log(e);
+            message.error({
+                content: 'Lỗi tải ảnh!',
+                key: 'editProduct',
+                duration: 2,
+            });
+        }
+
+        values.newImage = listImg;
         values._id = dataEdit._id;
-        if (!Array.isArray(values.listImage) && values.listImage) {
-            values.listImage = values.listImage.split(',');
-        }
-        if (!values.listImage) {
-            values.listImage = [];
-        }
-        fmData.append('fields', JSON.stringify(values));
-        fmData.append('action', 'update');
+        values.listImage = values.listImage?.map((img) => dataEdit.listImage.find((item) => item.name == img));
+        console.log(values.listImage, values.newImage);
         if (values.listImage.length || values.newImage.length) {
             axios
-                .post(process.env.REACT_APP_API_URL + '/api/handleProducts', fmData)
+                .post(process.env.REACT_APP_API_URL + '/api/handleProducts', { action: 'update', data: values })
                 .then((response) => {
                     if (response.status === 200) {
+                        message.success({
+                            content: 'Cập nhật thành công',
+                            key: 'editProduct',
+                            duration: 2,
+                        });
                         setIsEdit(false);
+                        setFileImg([]);
                         form.resetFields();
                         if (response.data.message) {
                             dispatch(reloadInitState());
@@ -67,35 +84,14 @@ export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
         } else {
             message.error({
                 content: 'Mỗi sản phẩm cần có ít nhất 1 ảnh!',
-                key: 'CancelEdit',
+                key: 'editProduct',
                 duration: 2,
             });
         }
     };
 
-    const getUrl = React.useCallback(async (files) => {
-        const src = await Array.from(files).map((file) => {
-            return Resizer.imageFileResizer(
-                file,
-                500,
-                500,
-                'WEBP',
-                80,
-                0,
-                (file) => {
-                    setFileImg((prev) => [...prev, file]);
-                },
-                'file',
-                250,
-                250,
-            );
-        });
-        return src;
-    }, []);
-
-    const selectedImg = async (e) => {
-        setFileImg([]);
-        await getUrl(e.target.files);
+    const selectedImg = (e) => {
+        setFileImg(e.target.files);
     };
 
     const handleCancel = () => {
@@ -186,7 +182,13 @@ export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
                     <Input.TextArea />
                 </Form.Item>
                 <Form.Item label="Danh sách ảnh" name="listImage">
-                    <Input type="text" />
+                    <Select mode="multiple">
+                        {dataEdit.listImage?.map((img) => (
+                            <Select.Option key={img.name || img} value={img.name || img}>
+                                {img.name || img}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Form.Item>
                 <Form.Item name="newImage">
                     <input type="file" accept="image/*" value={fileImg} multiple onChange={selectedImg} />

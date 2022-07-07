@@ -8,20 +8,99 @@ import className from 'classnames/bind';
 
 const cx = className.bind(style);
 
+const columns = [
+    {
+        title: 'Mã đơn hàng',
+        dataIndex: '_id',
+        key: 'id',
+        render: (text) => (
+            <p key={text} className="link" onClick={() => window.handlePreviewOder(text)}>
+                {text}
+            </p>
+        ),
+        ellipsis: 'ellipsis',
+    },
+    {
+        title: 'Số điện thoại',
+        dataIndex: 'phoneNumber',
+        key: 'phoneNumber',
+        responsive: ['lg'],
+    },
+    {
+        title: 'Địa chỉ',
+        dataIndex: 'address',
+        key: 'address',
+        responsive: ['xl'],
+    },
+    {
+        title: 'Thành tiền',
+        dataIndex: 'total',
+        key: 'total',
+        render: (text) => text.toLocaleString('en-gb') + 'đ',
+        responsive: ['md'],
+    },
+    {
+        title: 'Thanh toán',
+        dataIndex: 'payMethod',
+        key: 'payMethod',
+        responsive: ['lg'],
+    },
+    {
+        title: 'Vận chuyển',
+        dataIndex: 'transport',
+        key: 'transport',
+        render: (text) => {
+            return text === 'normal' ? 'Bình thường' : 'Hoả tốc';
+        },
+        responsive: ['lg'],
+    },
+    {
+        title: 'Ghi chú',
+        dataIndex: 'note',
+        key: 'note',
+        responsive: ['xl'],
+    },
+    {
+        title: 'Trạng thái',
+        dataIndex: 'status',
+        key: 'status',
+        render: (text, record) => {
+            if (text === 'pending') {
+                return (
+                    <Tag key={record._id} icon={<ClockCircleOutlined />} color="warning">
+                        Chờ xác nhận
+                    </Tag>
+                );
+            } else if (text === 'confirm') {
+                return (
+                    <Tag key={record._id} icon={<ClockCircleOutlined />} color="processing">
+                        Đã xác nhận
+                    </Tag>
+                );
+            } else if (text === 'cancel') {
+                return (
+                    <Tag key={record._id} icon={<CloseCircleOutlined />} color="error">
+                        Đã huỷ
+                    </Tag>
+                );
+            } else {
+                return (
+                    <Tag key={record._id} icon={<CheckCircleOutlined />} color="success">
+                        Thành công
+                    </Tag>
+                );
+            }
+        },
+    },
+];
+
 const itemColumns = [
     {
         key: 'imageURL',
         dataIndex: 'imageURL',
         title: 'Ảnh',
         render: (text) => (
-            <img
-                key={text}
-                width={80}
-                height={80}
-                style={{ objectFit: 'contain' }}
-                src={text.url}
-                alt="imageProducts"
-            />
+            <img key={text} width={80} height={80} style={{ objectFit: 'contain' }} src={text} alt="imageProducts" />
         ),
     },
     {
@@ -90,97 +169,11 @@ export default function ListOders({ data: { odersList, setOdersList } }) {
             })
             .catch((err) => console.log(err));
     };
-    const columns = [
-        {
-            title: 'Mã đơn hàng',
-            dataIndex: '_id',
-            key: 'id',
-            render: (text) => (
-                <p
-                    key={text}
-                    className="link"
-                    onClick={() => {
-                        setPreviewOder(odersList.find((item) => item._id === text));
-                    }}
-                >
-                    {text}
-                </p>
-            ),
-            ellipsis: 'ellipsis',
-        },
-        {
-            title: 'Số điện thoại',
-            dataIndex: 'phoneNumber',
-            key: 'phoneNumber',
-            responsive: ['lg'],
-        },
-        {
-            title: 'Địa chỉ',
-            dataIndex: 'address',
-            key: 'address',
-            responsive: ['xl'],
-        },
-        {
-            title: 'Thành tiền',
-            dataIndex: 'total',
-            key: 'total',
-            render: (text) => text.toLocaleString('en-gb') + 'đ',
-            responsive: ['md'],
-        },
-        {
-            title: 'Thanh toán',
-            dataIndex: 'payMethod',
-            key: 'payMethod',
-            responsive: ['lg'],
-        },
-        {
-            title: 'Vận chuyển',
-            dataIndex: 'transport',
-            key: 'transport',
-            render: (text) => {
-                return text === 'normal' ? 'Bình thường' : 'Hoả tốc';
-            },
-            responsive: ['lg'],
-        },
-        {
-            title: 'Ghi chú',
-            dataIndex: 'note',
-            key: 'note',
-            responsive: ['xl'],
-        },
-        {
-            title: 'Trạng thái',
-            dataIndex: 'status',
-            key: 'status',
-            render: (text, record) => {
-                if (text === 'pending') {
-                    return (
-                        <Tag key={record._id} icon={<ClockCircleOutlined />} color="warning">
-                            Chờ xác nhận
-                        </Tag>
-                    );
-                } else if (text === 'confirm') {
-                    return (
-                        <Tag key={record._id} icon={<ClockCircleOutlined />} color="processing">
-                            Đã xác nhận
-                        </Tag>
-                    );
-                } else if (text === 'cancel') {
-                    return (
-                        <Tag key={record._id} icon={<CloseCircleOutlined />} color="error">
-                            Đã huỷ
-                        </Tag>
-                    );
-                } else {
-                    return (
-                        <Tag key={record._id} icon={<CheckCircleOutlined />} color="success">
-                            Thành công
-                        </Tag>
-                    );
-                }
-            },
-        },
-    ];
+
+    window.handlePreviewOder = React.useCallback((id) => {
+        setPreviewOder(odersList.find((item) => item._id === id));
+    });
+
     return (
         <>
             <Modal

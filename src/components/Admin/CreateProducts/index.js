@@ -6,7 +6,8 @@ import productsSlice from '../../../redux/productsSlice';
 import SelectCustom from './SelectCustom';
 import { catalogSelector, categorySelector } from '../../../redux/selector';
 import { reloadInitState } from '../../../redux/catalogSlice';
-import Resizer from 'react-image-file-resizer';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../../firebase/config';
 
 export default function CreateProducts() {
     const [form] = Form.useForm();
@@ -19,23 +20,41 @@ export default function CreateProducts() {
     const catalogs = useSelector(catalogSelector);
     const categorys = useSelector(categorySelector);
 
-    const onFinish = (values) => {
-        const fmData = new FormData();
-        values.listImage = Object.values(fileImg).map((file) => {
-            fmData.append('file', file);
-            return file.name;
-        });
-        values.createdAt = Date.now();
-        fmData.append('fields', JSON.stringify(values));
-        fmData.append('action', 'create');
-        setValidateFile({ validateStatus: 'validating' });
+    const onFinish = async (values) => {
+        // Promise.all(
+        //     Object.values(fileImg).map(async (file) => {
+        //         const imgRef = await uploadBytes(ref(storage, file.name), file);
+        //         return { name: file.name, url: await getDownloadURL(imgRef.ref) };
+        //     }),
+        // ).then(([...result]) => {
+        //     values.listImage = result;
+        // });
         message.loading({
             content: 'Thêm sản phẩm...',
             key: 'addProduct',
             duration: 10000,
         });
+        const listImg = [];
+        try {
+            for (const file of Object.values(fileImg)) {
+                const imgRef = await uploadBytes(ref(storage, file.name), file);
+                listImg.push({ name: file.name, url: await getDownloadURL(imgRef.ref) });
+            }
+        } catch (e) {
+            console.log(e);
+            message.error({
+                content: 'Lỗi tải ảnh!',
+                key: 'addProduct',
+                duration: 2,
+            });
+        }
+
+        values.listImage = listImg;
+        values.createdAt = Date.now();
+        setValidateFile({ validateStatus: 'validating' });
+
         axios
-            .post(process.env.REACT_APP_API_URL + '/api/handleProducts', fmData)
+            .post(process.env.REACT_APP_API_URL + '/api/handleProducts', { action: 'create', data: values })
             .then((response) => {
                 if (response.status === 200) {
                     setIsEnabled([]);
@@ -66,38 +85,24 @@ export default function CreateProducts() {
 
     const getUrl = React.useCallback(async (files) => {
         const src = await Array.from(files).map((file) => {
-            return Resizer.imageFileResizer(
-                file,
-                500,
-                500,
-                'WEBP',
-                80,
-                0,
-                (file) => {
-                    setFileImg((prev) => [...prev, file]);
-                    return new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.readAsDataURL(file);
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
 
-                        reader.onload = () => resolve(reader.result);
+                reader.onload = () => resolve(reader.result);
 
-                        reader.onerror = (error) => reject(error);
-                    }).then((res) => {
-                        setImagePreview((prev) => [...prev, res]);
-                    });
-                },
-                'file',
-                250,
-                250,
-            );
+                reader.onerror = (error) => reject(error);
+            }).then((res) => {
+                setImagePreview((prev) => [...prev, res]);
+            });
         });
         return src;
     }, []);
 
-    const selectedImg = async (e) => {
-        setFileImg([]);
+    const selectedImg = (e) => {
+        setFileImg(e.target.files);
         setImagePreview([]);
-        await getUrl(e.target.files);
+        getUrl(e.target.files);
         if (e.target.files.length < 1) {
             setValidateFile({ validateStatus: 'error', help: 'Chọn ít nhất 1 ảnh!' });
         } else {

@@ -20,26 +20,27 @@ function App() {
     React.useLayoutEffect(() => {
         window.scrollTo(0, 0);
     }, [location]);
-    return loadingState !== false ? (
-        <Loading />
-    ) : (
-        <Layout className="App">
-            <Header />
-            <Routes>
-                <Route path="/thanh-toan" element={<Payment />} />
-                <Route path="/gio-hang" element={<CartList />} />
-                <Route path="/account/:page" element={<AccountCentral />} />
-                <Route path="/san-pham/:slug" element={<Product />} />
-                <Route path="/danh-muc/:catalog" element={<Catalog />}>
-                    <Route path=":category" element={<Catalog />} />
-                </Route>
-                <Route path="/*" element={<Home />} />
-            </Routes>
-            <Modal />
-            <Layout.Footer className="App_footer">
-                <Footer />
-            </Layout.Footer>
-        </Layout>
+    return (
+        <>
+            {loadingState !== false && <Loading />}
+            <Layout className="App">
+                <Header />
+                <Routes>
+                    <Route path="/thanh-toan" element={<Payment />} />
+                    <Route path="/gio-hang" element={<CartList />} />
+                    <Route path="/account/:page" element={<AccountCentral />} />
+                    <Route path="/san-pham/:slug" element={<Product />} />
+                    <Route path="/danh-muc/:catalog" element={<Catalog />}>
+                        <Route path=":category" element={<Catalog />} />
+                    </Route>
+                    <Route path="/*" element={<Home />} />
+                </Routes>
+                <Modal />
+                <Layout.Footer className="App_footer">
+                    <Footer />
+                </Layout.Footer>
+            </Layout>
+        </>
     );
 }
 

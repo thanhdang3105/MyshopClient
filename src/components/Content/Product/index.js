@@ -28,16 +28,28 @@ export default function Product() {
 
     const { currentUser, setVisibleLoginModal } = React.useContext(Account);
 
-    React.useLayoutEffect(() => {
+    React.useMemo(() => {
+        swiperRef !== null && swiperRef.slideTo(0, 200);
+        document
+            .getElementById('size')
+            ?.querySelector(`button.${cx('active')}`)
+            ?.classList.remove(cx('active'));
+        document
+            .getElementById('color')
+            ?.querySelector(`button.${cx('active')}`)
+            ?.classList.remove(cx('active'));
+    }, [slug]);
+
+    React.useEffect(() => {
         const size = document
             .getElementById('size')
-            .querySelector(`button.${cx('active')}`)
+            ?.querySelector(`button.${cx('active')}`)
             ?.innerText.toLowerCase();
-        const color = document.getElementById('color').querySelector(`button.${cx('active')}`)?.innerText;
+        const color = document.getElementById('color')?.querySelector(`button.${cx('active')}`)?.innerText;
         const product = products.find((product) => product.slug === slug);
         setProductCart({ ...product, color: color, size: size, user: currentUser?.uid });
         setData(product);
-    }, [slug, products, currentUser]);
+    }, [currentUser, data, slug, products]);
 
     React.useEffect(() => {
         if (loadingCart) {
