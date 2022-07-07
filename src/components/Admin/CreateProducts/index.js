@@ -69,7 +69,11 @@ export default function CreateProducts() {
                         key: 'addProduct',
                         duration: 3,
                     });
-                    dispatch(productsSlice.actions.addProducts(response.data));
+                    if (response.data.message) {
+                        dispatch(reloadInitState());
+                    } else {
+                        dispatch(productsSlice.actions.addProducts(response.data));
+                    }
                 }
             })
             .catch((err) => {

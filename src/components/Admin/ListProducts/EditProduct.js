@@ -71,7 +71,11 @@ export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
                         setIsEdit(false);
                         setFileImg([]);
                         form.resetFields();
-                        dispatch(productsSlice.actions.updateProducts(response.data));
+                        if (response.data.message) {
+                            dispatch(reloadInitState());
+                        } else {
+                            dispatch(productsSlice.actions.updateProducts(response.data));
+                        }
                     }
                 })
                 .catch((err) => {
