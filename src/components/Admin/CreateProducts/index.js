@@ -38,6 +38,7 @@ export default function CreateProducts() {
             key: 'addProduct',
             duration: 10000,
         });
+        setValidateFile({ validateStatus: 'validating' });
         const listImg = [];
         try {
             for (const file of Object.values(fileImg)) {
@@ -46,17 +47,15 @@ export default function CreateProducts() {
             }
         } catch (e) {
             console.log(e);
+            setValidateFile({});
             message.error({
                 content: 'Lỗi tải ảnh!',
                 key: 'addProduct',
                 duration: 2,
             });
         }
-
         values.listImage = listImg;
         values.createdAt = Date.now();
-        setValidateFile({ validateStatus: 'validating' });
-
         axios
             .post(process.env.REACT_APP_API_URL + '/api/handleProducts', { action: 'create', data: values })
             .then((response) => {
@@ -70,11 +69,7 @@ export default function CreateProducts() {
                         key: 'addProduct',
                         duration: 3,
                     });
-                    if (response.data.message) {
-                        dispatch(reloadInitState());
-                    } else {
-                        dispatch(productsSlice.actions.addProducts(response.data));
-                    }
+                    dispatch(productsSlice.actions.addProducts(response.data));
                 }
             })
             .catch((err) => {
@@ -83,6 +78,7 @@ export default function CreateProducts() {
                     key: 'addProduct',
                     duration: 3,
                 });
+                setValidateFile({});
                 console.log(err);
             });
     };
