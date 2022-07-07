@@ -14,11 +14,17 @@ export default function CreateProducts() {
     const [fileImg, setFileImg] = React.useState([]);
     const [imgPreview, setImagePreview] = React.useState([]);
     const [validateFile, setValidateFile] = React.useState({ validateStatus: 'warning', help: 'Chọn ít nhất 1 ảnh!' });
-    const [dataSelect, setDataSelect] = React.useState({ catalog: '', category: '', collections: '' });
+    const [dataSelect, setDataSelect] = React.useState({ catalog: [], category: [], collections: [] });
     const dispatch = useDispatch();
     const [isEnabled, setIsEnabled] = React.useState([]);
     const catalogs = useSelector(catalogSelector);
     const categorys = useSelector(categorySelector);
+
+    React.useEffect(() => {
+        console.log(dataSelect.category);
+        console.log(isEnabled);
+        dataSelect.category.length && isEnabled.includes('catalog') && setIsEnabled((prev) => [...prev, 'category']);
+    }, [dataSelect.catalog]);
 
     const onFinish = async (values) => {
         // Promise.all(
@@ -110,7 +116,19 @@ export default function CreateProducts() {
         }
     };
 
-    const isSelected = (value, name) => value && setIsEnabled((prev) => [...prev, name]);
+    const isSelected = (value, name) => {
+        if (value) {
+            setIsEnabled((prev) => [...prev, name]);
+        } else {
+            setIsEnabled((prev) => {
+                if (name === 'catalog') {
+                    return [];
+                }
+                form.resetFields(['collections']);
+                return prev.filter((item) => item !== name);
+            });
+        }
+    };
 
     return (
         <Form form={form} layout="vertical" labelAlign="center" onFinish={onFinish}>

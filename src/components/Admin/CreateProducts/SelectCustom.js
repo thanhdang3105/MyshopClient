@@ -16,7 +16,6 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
                     arrCatalog.push(item);
                     return item;
                 });
-
                 setItemsOption((prev) => [...prev.filter((item) => item.key), ...arrCatalog]);
                 break;
             case 'category':
@@ -55,7 +54,7 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
     };
 
     const handleAddOption = (value) => {
-        if (value.addOption !== '' && !itemsOption.find((item) => item.name === value.addOption)) {
+        if (value.addOption && !itemsOption.find((item) => item.name === value.addOption)) {
             setItemsOption((prev) => [{ key: value.addOption, name: value.addOption }, ...prev]);
             setOptionDisabled(false);
             form2.resetFields();
