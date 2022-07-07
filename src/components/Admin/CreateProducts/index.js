@@ -21,8 +21,6 @@ export default function CreateProducts() {
     const categorys = useSelector(categorySelector);
 
     React.useEffect(() => {
-        console.log(dataSelect.category);
-        console.log(isEnabled);
         dataSelect.category.length && isEnabled.includes('catalog') && setIsEnabled((prev) => [...prev, 'category']);
     }, [dataSelect.catalog]);
 
