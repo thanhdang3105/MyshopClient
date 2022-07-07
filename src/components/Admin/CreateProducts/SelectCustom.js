@@ -25,7 +25,10 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
                         arrCategory.push(category);
                         return category;
                     });
-                setItemsOption((prev) => [...prev.filter((item) => item.key), ...arrCategory]);
+                setItemsOption((prev) => [
+                    ...prev.filter((item) => item.key && !arrCategory.map((cate) => cate.name).includes(item.name)),
+                    ...arrCategory,
+                ]);
                 break;
             case 'collections':
                 let arrCollection = itemsOption.length ? itemsOption.filter((item) => item.key) : [];
@@ -33,7 +36,9 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
                     data.map((category) => {
                         if (checkData.dataSelect.category?.includes(category.name)) {
                             category.children.map((item) => {
-                                arrCollection.push(item);
+                                !arrCollection.map((collec) => collec.name).includes(item.name) &&
+                                    arrCollection.push(item);
+
                                 return item;
                             });
                         }
