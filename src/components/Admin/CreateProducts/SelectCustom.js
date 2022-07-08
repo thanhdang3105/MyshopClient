@@ -16,7 +16,10 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
                     arrCatalog.push(item);
                     return item;
                 });
-                setItemsOption((prev) => [...prev.filter((item) => item.key), ...arrCatalog]);
+                setItemsOption((prev) => {
+                    const newOption = [...prev.filter((item) => item.key), ...arrCatalog];
+                    return newOption;
+                });
                 break;
             case 'category':
                 let arrCategory = [];
@@ -25,25 +28,37 @@ export default function SelectCustom({ disabled = false, data, checkData, isSele
                         arrCategory.push(category);
                         return category;
                     });
-                setItemsOption((prev) => [
-                    ...prev.filter((item) => item.key && !arrCategory.map((cate) => cate.name).includes(item.name)),
-                    ...arrCategory,
-                ]);
+                setItemsOption((prev) => {
+                    const newOption = [
+                        ...prev.filter((item) => item.key && !arrCategory.map((cate) => cate.name).includes(item.name)),
+                        ...arrCategory,
+                    ];
+                    newOption.sort((a, b) => a.name.localeCompare(b.name));
+                    return newOption;
+                });
                 break;
             case 'collections':
-                let arrCollection = itemsOption.length ? itemsOption.filter((item) => item.key) : [];
+                let arrCollection = [];
                 data.length &&
                     data.map((category) => {
                         if (checkData.dataSelect.category?.includes(category.name)) {
                             category.children.map((item) => {
-                                !arrCollection.map((collec) => collec.name).includes(item.name) &&
-                                    arrCollection.push(item);
+                                arrCollection.push(item);
                                 return item;
                             });
                         }
                         return category;
                     });
-                setItemsOption(arrCollection);
+                setItemsOption((prev) => {
+                    const newOption = [
+                        ...prev.filter(
+                            (item) => item.key && !arrCollection.map((collect) => collect.name).includes(item.name),
+                        ),
+                        ...arrCollection,
+                    ];
+                    newOption.sort((a, b) => a.name.localeCompare(b.name));
+                    return newOption;
+                });
                 break;
             default:
                 throw new Error('Unknown property ' + prop.name);

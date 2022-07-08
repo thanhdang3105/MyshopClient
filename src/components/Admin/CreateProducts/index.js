@@ -6,7 +6,7 @@ import productsSlice from '../../../redux/productsSlice';
 import SelectCustom from './SelectCustom';
 import { catalogSelector, categorySelector } from '../../../redux/selector';
 import { reloadInitState } from '../../../redux/catalogSlice';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { storage } from '../../../firebase/config';
 
 export default function CreateProducts() {
@@ -24,6 +24,76 @@ export default function CreateProducts() {
         dataSelect.category.length && isEnabled.includes('catalog') && setIsEnabled((prev) => [...prev, 'category']);
     }, [dataSelect.catalog]);
 
+    const uploadImage = React.useCallback(async (file) => {
+        console.log('render');
+        const metadata = {
+            contentType: 'image/jpeg',
+        };
+        const imgRef = uploadBytesResumable(ref(storage, file.name), file, metadata);
+        await imgRef.on(
+            'state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                message.loading({
+                    content: 'Upload ' + file.name + ' ' + progress + '%',
+                    key: 'addProduct',
+                    duration: 10000,
+                });
+                switch (snapshot.state) {
+                    case 'paused':
+                        message.warn({
+                            content: 'Paused ' + file.name + ' ' + progress + '%',
+                            key: 'addProduct',
+                            duration: 10000,
+                        });
+                        break;
+                    case 'running':
+                        message.loading({
+                            content: 'Upload ' + file.name + ' ' + progress + '%',
+                            key: 'addProduct',
+                            duration: 10000,
+                        });
+                        break;
+                    default:
+                        throw new Error(`Invalid action: ` + snapshot.state);
+                }
+            },
+            (error) => {
+                // A full list of error codes is available at
+                // https://firebase.google.com/docs/storage/web/handle-errors
+                switch (error.code) {
+                    case 'storage/unauthorized':
+                        // User doesn't have permission to access the object
+                        message.error({
+                            content: 'Không thể truy cập kho lưu trữ!',
+                            key: 'addProduct',
+                            duration: 2,
+                        });
+                        break;
+                    case 'storage/canceled':
+                        // User canceled the upload
+                        message.error({
+                            content: 'Lỗi tải ảnh!',
+                            key: 'addProduct',
+                            duration: 2,
+                        });
+                        break;
+                    case 'storage/unknown':
+                        // Unknown error occurred, inspect error.serverResponse
+                        message.error({
+                            content: 'Lỗi không xác định!',
+                            key: 'addProduct',
+                            duration: 2,
+                        });
+                        break;
+                    default:
+                        throw new Error(`Invalid action: ` + error.code);
+                }
+            },
+        );
+        return imgRef;
+    }, []);
+
     const onFinish = async (values) => {
         // Promise.all(
         //     Object.values(fileImg).map(async (file) => {
@@ -33,26 +103,12 @@ export default function CreateProducts() {
         // ).then(([...result]) => {
         //     values.listImage = result;
         // });
-        message.loading({
-            content: 'Thêm sản phẩm...',
-            key: 'addProduct',
-            duration: 10000,
-        });
+
         setValidateFile({ validateStatus: 'validating' });
         const listImg = [];
-        try {
-            for (const file of Object.values(fileImg)) {
-                const imgRef = await uploadBytes(ref(storage, file.name), file);
-                listImg.push({ name: file.name, url: await getDownloadURL(imgRef.ref) });
-            }
-        } catch (e) {
-            console.log(e);
-            setValidateFile({});
-            message.error({
-                content: 'Lỗi tải ảnh!',
-                key: 'addProduct',
-                duration: 2,
-            });
+        for (const file of Object.values(fileImg)) {
+            const imgRef = await uploadImage(file);
+            listImg.push({ name: file.name, url: await getDownloadURL(imgRef.ref) });
         }
         values.listImage = listImg;
         values.createdAt = Date.now();

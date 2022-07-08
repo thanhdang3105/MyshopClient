@@ -59,7 +59,7 @@ export const reloadInitState = createAsyncThunk('catalogs/reloadData', async (_,
         return catalog;
     });
     catalogdata.map((item) => {
-        item.category.sort((a, b) => a.name.localeCompare(b.name));
+        item.category = item.category.sort((a, b) => a.name.localeCompare(b.name));
         return item;
     });
     dispatch(productsListSlice.actions.setInitProducts(products));

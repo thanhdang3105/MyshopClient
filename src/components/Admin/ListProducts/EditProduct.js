@@ -6,7 +6,7 @@ import { reloadInitState } from '../../../redux/catalogSlice';
 import productsSlice from '../../../redux/productsSlice';
 import { catalogSelector, categorySelector, productEditSelector } from '../../../redux/selector';
 import SelectCustom from '../CreateProducts/SelectCustom';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from '../../../firebase/config';
 
 export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
@@ -33,31 +33,85 @@ export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
         setDataSelect((prev) => ({ ...prev, category: dataEdit.category?.split(',') }));
     }, [dataEdit, form]);
 
+    const uploadImage = React.useCallback(async (file) => {
+        const metadata = {
+            contentType: 'image/jpeg',
+        };
+        const imgRef = uploadBytesResumable(ref(storage, file.name), file, metadata);
+        await imgRef.on(
+            'state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                message.loading({
+                    content: 'Upload ' + file.name + ' ' + progress + '%',
+                    key: 'editProduct',
+                    duration: 10000,
+                });
+                switch (snapshot.state) {
+                    case 'paused':
+                        message.warn({
+                            content: 'Paused ' + file.name + ' ' + progress + '%',
+                            key: 'editProduct',
+                            duration: 10000,
+                        });
+                        break;
+                    case 'running':
+                        message.loading({
+                            content: 'Upload ' + file.name + ' ' + progress + '%',
+                            key: 'editProduct',
+                            duration: 10000,
+                        });
+                        break;
+                    default:
+                        throw new Error(`Invalid action: ` + snapshot.state);
+                }
+            },
+            (error) => {
+                // A full list of error codes is available at
+                // https://firebase.google.com/docs/storage/web/handle-errors
+                switch (error.code) {
+                    case 'storage/unauthorized':
+                        // User doesn't have permission to access the object
+                        message.error({
+                            content: 'Không thể truy cập kho lưu trữ!',
+                            key: 'editProduct',
+                            duration: 2,
+                        });
+                        break;
+                    case 'storage/canceled':
+                        // User canceled the upload
+                        message.error({
+                            content: 'Lỗi tải ảnh!',
+                            key: 'editProduct',
+                            duration: 2,
+                        });
+                        break;
+                    case 'storage/unknown':
+                        // Unknown error occurred, inspect error.serverResponse
+                        message.error({
+                            content: 'Lỗi không xác định!',
+                            key: 'editProduct',
+                            duration: 2,
+                        });
+                        break;
+                    default:
+                        throw new Error(`Invalid action: ` + error.code);
+                }
+            },
+        );
+        return imgRef;
+    }, []);
+
     const handleFinish = async (values) => {
-        message.loading({
-            content: 'Thêm sản phẩm...',
-            key: 'editProduct',
-            duration: 10000,
-        });
         const listImg = [];
-        try {
-            for (const file of Object.values(fileImg)) {
-                const imgRef = await uploadBytes(ref(storage, file.name), file);
-                listImg.push({ name: file.name, url: await getDownloadURL(imgRef.ref) });
-            }
-        } catch (e) {
-            console.log(e);
-            message.error({
-                content: 'Lỗi tải ảnh!',
-                key: 'editProduct',
-                duration: 2,
-            });
+        for (const file of Object.values(fileImg)) {
+            const imgRef = await uploadImage(file);
+            listImg.push({ name: file.name, url: await getDownloadURL(imgRef.ref) });
         }
 
         values.newImage = listImg;
         values._id = dataEdit._id;
-        values.listImage = values.listImage?.map((img) => dataEdit.listImage.find((item) => item.name == img));
-        console.log(values.listImage, values.newImage);
+        values.listImage = values.listImage?.map((img) => dataEdit.listImage.find((item) => item.name === img));
         if (values.listImage.length || values.newImage.length) {
             axios
                 .post(process.env.REACT_APP_API_URL + '/api/handleProducts', { action: 'update', data: values })
