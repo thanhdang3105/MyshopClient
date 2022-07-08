@@ -41,7 +41,7 @@ export default function EditProduct({ edit: { isEdit, setIsEdit } }) {
         await imgRef.on(
             'state_changed',
             (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 message.loading({
                     content: 'Upload ' + file.name + ' ' + progress + '%',
                     key: 'editProduct',

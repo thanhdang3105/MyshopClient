@@ -25,7 +25,6 @@ export default function CreateProducts() {
     }, [dataSelect.catalog]);
 
     const uploadImage = React.useCallback(async (file) => {
-        console.log('render');
         const metadata = {
             contentType: 'image/jpeg',
         };
@@ -33,7 +32,7 @@ export default function CreateProducts() {
         await imgRef.on(
             'state_changed',
             (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 message.loading({
                     content: 'Upload ' + file.name + ' ' + progress + '%',
                     key: 'addProduct',

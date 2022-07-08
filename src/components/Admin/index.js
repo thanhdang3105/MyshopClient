@@ -102,7 +102,9 @@ export default function Admin() {
         <Layout hasSider>
             <Sider ref={siderRef} className="sider" collapsible collapsed={collapsed} trigger={null}>
                 <a
-                    onClick={() => {
+                    href="/"
+                    onClick={(e) => {
+                        e.preventDefault();
                         auth.signOut();
                         navigate('/');
                     }}

@@ -60,22 +60,22 @@ export default function Footer() {
                 <Col className={cx('footer_col')}>
                     <div className={cx('footer_social')}>
                         <Tooltip title="Follow Facebook">
-                            <a className={cx('social_link')} href="#">
+                            <a className={cx('social_link')} href="#top">
                                 <FacebookFilled />
                             </a>
                         </Tooltip>
                         <Tooltip title="Follow Instagram">
-                            <a className={cx('social_link')} href="#">
+                            <a className={cx('social_link')} href="#top">
                                 <InstagramFilled />
                             </a>
                         </Tooltip>
                         <Tooltip title="Follow Twitter">
-                            <a className={cx('social_link')} href="#">
+                            <a className={cx('social_link')} href="#top">
                                 <TwitterSquareFilled />
                             </a>
                         </Tooltip>
                         <Tooltip title="Follow Youtube">
-                            <a className={cx('social_link')} href="#">
+                            <a className={cx('social_link')} href="#top">
                                 <YoutubeFilled />
                             </a>
                         </Tooltip>

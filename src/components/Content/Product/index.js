@@ -38,7 +38,7 @@ export default function Product() {
             .getElementById('color')
             ?.querySelector(`button.${cx('active')}`)
             ?.classList.remove(cx('active'));
-    }, [slug]);
+    }, [slug, swiperRef]);
 
     React.useEffect(() => {
         const size = document
