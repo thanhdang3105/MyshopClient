@@ -57,6 +57,7 @@
                 object-fit: contain;
                 height: 100%;
                 width: 100%;
+                image-rendering: optimizeQuality;
             }
         }
         .item_content{
@@ -102,12 +103,13 @@
                     display: flex;
                     gap: 10px;
                     overflow: hidden;
-                img{
+                    img{
                         width: calc(25% - 8px);
                         object-fit: contain;
                         object-position: center;
+                        image-rendering: optimizeQuality;
                         cursor: pointer;
-                }
+                    }
                 }
             }
         }

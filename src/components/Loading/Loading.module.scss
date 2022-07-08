@@ -22,6 +22,7 @@
                 height: 30px;
                 object-fit: contain;
                 background-color: transparent;
+                image-rendering: optimizeQuality;
             }
         }
         .loading_content-text{

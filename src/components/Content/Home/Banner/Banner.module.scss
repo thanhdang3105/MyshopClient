@@ -15,6 +15,7 @@
     .img{
         width: 100%;
         display: inline-block;
+        image-rendering: optimizeQuality;
     }
     .dot_banner{
         position: absolute;
