@@ -13,7 +13,7 @@
         overflow: hidden;
         img{
             background-color: white;
-            image-rendering: optimizeQuality;
+            image-rendering: pixelated;
             width: 100%;
             height: 100%;
             object-fit: contain;
@@ -61,7 +61,7 @@
 
 .imagePreviewUpload{
     img{
-        image-rendering: optimizeQuality;
+        image-rendering: pixelated;
         width: 150px;
         height: 150px;
         object-fit: contain;

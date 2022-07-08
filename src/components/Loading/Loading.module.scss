@@ -22,7 +22,7 @@
                 height: 30px;
                 object-fit: contain;
                 background-color: transparent;
-                image-rendering: optimizeQuality;
+                image-rendering: pixelated;
             }
         }
         .loading_content-text{

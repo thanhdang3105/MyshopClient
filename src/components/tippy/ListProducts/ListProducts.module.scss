@@ -57,7 +57,7 @@
                 object-fit: contain;
                 height: 100%;
                 width: 100%;
-                image-rendering: optimizeQuality;
+                image-rendering: pixelated;
             }
         }
         .item_content{
@@ -107,7 +107,7 @@
                         width: calc(25% - 8px);
                         object-fit: contain;
                         object-position: center;
-                        image-rendering: optimizeQuality;
+                        image-rendering: pixelated;
                         cursor: pointer;
                     }
                 }
