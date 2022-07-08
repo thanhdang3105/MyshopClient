@@ -51,6 +51,9 @@ export default function Catalog() {
             productsFilter = productsFilter?.filter(
                 (product) => product.category.split(' ').join('-').toLowerCase() === category.toLowerCase(),
             );
+            catalogsFilter = catalogsFilter?.category.find(
+                (cate) => cate.name.split(' ').join('-').toLowerCase() === category.toLowerCase(),
+            );
         }
         if (searchParams.keys().next().value) {
             const key = searchParams.keys().next().value;
@@ -137,7 +140,7 @@ export default function Catalog() {
                     {category && data?.catalogsFilter?.path ? (
                         <>
                             <Breadcrumb.Item>
-                                <Link to={data?.catalogsFilter?.path} style={{ textTransform: 'capitalize' }}>
+                                <Link to={'/danh-muc/' + catalog} style={{ textTransform: 'capitalize' }}>
                                     {catalog}
                                 </Link>
                             </Breadcrumb.Item>

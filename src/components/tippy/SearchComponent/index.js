@@ -47,7 +47,6 @@ export default function SearchComponent({ children, data, search, visible, class
 
     const handleVisibleChange = (visible) => {
         if (!search) {
-            console.log(search);
             setState([]);
         }
     };

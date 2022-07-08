@@ -28,7 +28,7 @@ export default function Product() {
 
     const { currentUser, setVisibleLoginModal } = React.useContext(Account);
 
-    React.useMemo(() => {
+    React.useEffect(() => {
         swiperRef !== null && swiperRef.slideTo(0, 200);
         document
             .getElementById('size')

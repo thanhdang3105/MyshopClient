@@ -31,7 +31,6 @@ export default function EditUser({ setUserEdit, data }) {
                 uid: data.uid,
             })
             .catch((err) => console.log(err));
-        console.log(value);
         updateDocument(data.id, 'users', {
             uid: data.uid,
             name: value.name,

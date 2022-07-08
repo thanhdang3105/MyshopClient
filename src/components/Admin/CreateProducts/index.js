@@ -21,8 +21,10 @@ export default function CreateProducts() {
     const categorys = useSelector(categorySelector);
 
     React.useEffect(() => {
-        dataSelect.category.length && isEnabled.includes('catalog') && setIsEnabled((prev) => [...prev, 'category']);
-    }, [dataSelect.catalog]);
+        dataSelect.category.length &&
+            isEnabled.includes('catalog') &&
+            setIsEnabled((prev) => (!prev.includes('category') ? [...prev, 'category'] : prev));
+    }, [dataSelect.catalog, isEnabled]);
 
     const uploadImage = React.useCallback(async (file) => {
         const metadata = {
@@ -171,7 +173,7 @@ export default function CreateProducts() {
 
     const isSelected = (value, name) => {
         if (value) {
-            setIsEnabled((prev) => [...prev, name]);
+            setIsEnabled((prev) => (!prev.includes(name) ? [...prev, name] : prev));
         } else {
             setIsEnabled((prev) => {
                 if (name === 'catalog') {

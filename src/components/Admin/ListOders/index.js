@@ -170,9 +170,12 @@ export default function ListOders({ data: { odersList, setOdersList } }) {
             .catch((err) => console.log(err));
     };
 
-    window.handlePreviewOder = React.useCallback((id) => {
-        setPreviewOder(odersList.find((item) => item._id === id));
-    }, []);
+    window.handlePreviewOder = React.useCallback(
+        (id) => {
+            setPreviewOder(odersList.find((item) => item._id === id));
+        },
+        [odersList],
+    );
 
     return (
         <>
