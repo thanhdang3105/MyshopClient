@@ -35,7 +35,6 @@ export default function Banner({ data }) {
             dotsClass={cx('dot_banner')}
             slidesToShow={1}
             slidesToScroll={1}
-            touchMove={false}
             autoplay={true}
             autoplaySpeed={5000}
             className={cx('wrapper_banner')}
