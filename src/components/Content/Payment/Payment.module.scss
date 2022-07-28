@@ -87,7 +87,6 @@
             align-items: center;
             padding: 10px;
             label{
-                height: 22px;
                 display: flex;
                 text-transform: uppercase;
                 flex: 1;
@@ -115,6 +114,20 @@
     }
 }
 
+@media (max-width: 992px) {
+    .wrapper{
+        .content_info{
+            .form_info{
+                display: flex;
+                flex-direction: column;
+            }
+        }
+        .div_transport{
+            width: 100%;
+        }
+    }
+}
+
 @media (max-width: 768px) {
     .wrapper{
         padding: 0;
@@ -131,9 +144,6 @@
             width: 50%;
             padding: 0;
         }
-    }
-    .div_transport{
-        width: 100%;
     }
 }
 
