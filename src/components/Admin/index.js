@@ -60,17 +60,25 @@ export default function Admin() {
     const siderRef = React.useRef();
 
     React.useEffect(() => {
+        if (!auth.currentUser) {
+            navigate('/');
+        }
+    }, [auth.currentUser]);
+
+    React.useEffect(() => {
         axios
             .post(process.env.REACT_APP_API_URL + '/api/OdersList', { action: 'getAll' })
             .then((result) => setOdersList(result.data));
     }, []);
 
     React.useEffect(() => {
-        if (window.innerWidth < 992 && window.innerWidth >= 600) {
-            setCollapsed(true);
-        } else {
-            setCollapsed(false);
-        }
+        window.onresize = (e) => {
+            if (e.currentTarget.innerWidth < 992 && e.currentTarget.innerWidth >= 600) {
+                setCollapsed(true);
+            } else {
+                setCollapsed(false);
+            }
+        };
         switch (selectedKey) {
             case '1':
                 siderRef.current?.classList.remove('sider_show');
@@ -90,6 +98,9 @@ export default function Admin() {
             default:
                 throw new Error('Invalid items: ' + selectedKey);
         }
+        return () => {
+            window.onresize = null;
+        };
     }, [selectedKey, odersList]);
 
     const handleToggleMenuMobile = () => {
@@ -106,8 +117,8 @@ export default function Admin() {
                     onClick={(e) => {
                         e.preventDefault();
                         auth.signOut();
-                        navigate('/');
                     }}
+                    style={collapsed ? { paddingTop: '15px' } : { padding: '15px' }}
                     className="logo"
                 >
                     <img src={`${process.env.PUBLIC_URL}/img/logo.png`} alt="logo" />
