@@ -20,7 +20,7 @@ export default function Login({ setRegister, setVisibleLoginModal, setTitle }) {
     const [validateVerifiCode, setValidateVerifiCode] = React.useState({});
     const [forgotPassword, setForgotPassword] = React.useState(false);
     const [resetPassword, setResetPassword] = React.useState(false);
-    const { users } = React.useContext(Account);
+    const { listUser } = React.useContext(Account);
 
     const [form] = Form.useForm();
     const [form1] = Form.useForm();
@@ -92,7 +92,7 @@ export default function Login({ setRegister, setVisibleLoginModal, setTitle }) {
             }
         } else {
             setValidateAccount({ hasFeedback: true, validateStatus: 'validating' });
-            const account = users.find((user) => user.email === value.account);
+            const account = listUser.find((user) => user.email === value.account);
             if (account) {
                 setValidateAccount({});
                 axios
