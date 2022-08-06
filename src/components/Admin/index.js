@@ -18,6 +18,9 @@ import ListOders from './ListOders';
 import axios from 'axios';
 import { auth } from '../../firebase/config';
 const { Content, Footer, Sider } = Layout;
+
+let handleLogout = () => {};
+
 const items = [
     {
         label: 'Danh sách tài khoản',
@@ -37,7 +40,7 @@ const items = [
     },
     {
         label: (
-            <Button type="primary" danger>
+            <Button type="primary" danger onClick={handleLogout}>
                 Đăng xuất
             </Button>
         ),
@@ -58,12 +61,6 @@ export default function Admin() {
 
     const navigate = useNavigate();
     const siderRef = React.useRef();
-
-    React.useEffect(() => {
-        if (!auth.currentUser) {
-            navigate('/');
-        }
-    }, [auth.currentUser]);
 
     React.useEffect(() => {
         axios
@@ -93,7 +90,7 @@ export default function Admin() {
                 siderRef.current?.classList.remove('sider_show');
                 return setContent(<ListProducts />);
             case '5':
-                auth.signOut();
+                handleLogout();
                 break;
             default:
                 throw new Error('Invalid items: ' + selectedKey);
@@ -102,6 +99,11 @@ export default function Admin() {
             window.onresize = null;
         };
     }, [selectedKey, odersList]);
+
+    handleLogout = React.useCallback(() => {
+        auth.signOut();
+        navigate('/');
+    }, [navigate]);
 
     const handleToggleMenuMobile = () => {
         siderRef.current.classList.toggle('sider_show');
@@ -116,7 +118,7 @@ export default function Admin() {
                     href="/"
                     onClick={(e) => {
                         e.preventDefault();
-                        auth.signOut();
+                        handleLogout();
                     }}
                     style={collapsed ? { paddingTop: '15px' } : { padding: '15px' }}
                     className="logo"

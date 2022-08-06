@@ -60,21 +60,25 @@ export default function AccountCentral() {
     const { currentUser, setVisibleLoginModal, odersList, setOdersList } = React.useContext(Account);
     const [previewOder, setPreviewOder] = React.useState({});
     const [collapsed, setCollapsed] = React.useState(false);
-    const [isStateChange, setIsStateChange] = React.useState(false);
     const { page } = useParams();
     const navigate = useNavigate();
 
     React.useLayoutEffect(() => {
-        if (window.innerWidth < 992) {
-            setCollapsed(true);
-        } else {
-            setCollapsed(false);
-        }
+        window.onresize = (e) => {
+            if (e.currentTarget.innerWidth < 992) {
+                setCollapsed(true);
+            } else {
+                setCollapsed(false);
+            }
+        };
         if (currentUser) {
             setVisibleLoginModal(false);
         } else {
             setVisibleLoginModal(true);
         }
+        return () => {
+            window.onresize = null;
+        };
     }, [currentUser, setVisibleLoginModal]);
 
     const cancelOder = (id) => {
@@ -90,9 +94,8 @@ export default function AccountCentral() {
                         setOdersList((prev) => {
                             const itemCancel = prev.find((item) => item._id === id);
                             itemCancel.status = 'cancel';
-                            return prev;
+                            return [...prev];
                         });
-                        setIsStateChange((prev) => !prev);
                     }
                 })
                 .catch((err) => console.log(err));
